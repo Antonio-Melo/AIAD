@@ -15,5 +15,5 @@ Pretende-se igualmente estudar o impacto de diferentes estratégias de preços d
 
 **Material**
 
-Repast+SAJaS, JADE
+[Repast](https://repast.github.io/)+SAJaS, [JADE](http://jade.tilab.com/)
 Thomas Vrancken Daniel Tenbrock Sebastian Reick Dejan Bozhinovski Gerhard Weiss Gerasimos Spanakis (2017): [Multi-Agent Parking Place Simulation](https://paginas.fe.up.pt/~eol/AIAD/1718/trabalhos/Multi-Agent%20Parking%20Place%20Simulation.pdf), in Advances in Practical Applications of Cyber-Physical Multi-Agent Systems: The PAAMS Collection: 15th International Conference, PAAMS 2017, Porto, Portugal, June 21-23, 2017, Proceedings, Y. Demazeau, et al., Editors. 2017, Springer International Publishing: Cham. p. 272-283.
