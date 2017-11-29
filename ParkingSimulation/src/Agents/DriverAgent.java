@@ -2,8 +2,6 @@ package Agents;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.SpatialMath;
-import repast.simphony.space.continuous.ContinuousSpace;
-import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
@@ -23,11 +21,10 @@ public class DriverAgent extends Agent {
 	private int maxWalkingDistance;
 	private int initialTime;
 	private int day;
-	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
 	private boolean moved;
 
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
+	public DriverAgent(Grid<Object> grid, int startX, int startY, int destinationX,
 			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
 			int initialTime, int day) {
 
@@ -43,7 +40,6 @@ public class DriverAgent extends Agent {
 		this.maxWalkingDistance = maxWalkingDistance;
 		this.initialTime = initialTime;
 		this.day = day;
-		this.space = space;
 		this.grid = grid;
 	}
 

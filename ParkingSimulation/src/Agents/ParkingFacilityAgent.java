@@ -14,7 +14,6 @@ public class ParkingFacilityAgent extends Agent {
 	private int x;
 	private int y;
 	private int capacity;
-	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
 
 	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, String name, String operator, int x,
@@ -24,7 +23,6 @@ public class ParkingFacilityAgent extends Agent {
 		this.x = x;
 		this.y = y;
 		this.capacity = capacity;
-		this.space = space;
 		this.grid = grid;
 	}
 
