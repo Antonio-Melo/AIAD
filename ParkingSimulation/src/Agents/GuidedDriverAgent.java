@@ -2,6 +2,7 @@ package Agents;
 
 import java.util.PriorityQueue;
 
+import Utilities.ParkingFacilityComparator;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
@@ -14,7 +15,7 @@ public class GuidedDriverAgent extends DriverAgent {
 			int initialTime, int day) {
 		super(space, grid, startX, startY, destinationX, destinatioY, arrival, maxPricePerHour, durationOfStay,
 				maxWalkingDistance, initialTime, day);
-		this.parkList = new PriorityQueue<>();
+		this.parkList = new PriorityQueue<>(new ParkingFacilityComparator(this));
 	}
 
 	/**
