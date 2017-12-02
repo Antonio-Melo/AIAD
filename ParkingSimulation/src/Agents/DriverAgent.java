@@ -2,6 +2,8 @@ package Agents;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.SpatialMath;
+import repast.simphony.space.continuous.ContinuousSpace;
+import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
@@ -22,9 +24,10 @@ public class DriverAgent extends Agent {
 	private int initialTime;
 	private int day;
 	private Grid<Object> grid;
+	private ContinuousSpace <Object > space;
 	private boolean moved;
 
-	public DriverAgent(Grid<Object> grid, int startX, int startY, int destinationX,
+	public DriverAgent(ContinuousSpace <Object > space, Grid<Object> grid, int startX, int startY, int destinationX,
 			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
 			int initialTime, int day) {
 
@@ -41,19 +44,19 @@ public class DriverAgent extends Agent {
 		this.initialTime = initialTime;
 		this.day = day;
 		this.grid = grid;
+		this.space = space;
 	}
-
+	
 	public void moveTowards(GridPoint pt) {
 
 		// only move if we are not already in this grid location
 		if (!pt.equals(grid.getLocation(this))) {
 			NdPoint myPoint = space.getLocation(this);
-			NdPoint otherPoint = new NdPoint(pt.getX(), pt.getY());
-			double angle = SpatialMath.calcAngleFor2DMovement(space, myPoint, otherPoint);
-			space.moveByVector(this, 1, angle, 0);
+			NdPoint otherPoint = new NdPoint(pt.getX(), pt.getY ());
+			double  angle = SpatialMath.calcAngleFor2DMovement(space ,	myPoint , otherPoint );
+			space.moveByVector(this , 1, angle , 0);
 			myPoint = space.getLocation(this);
 			grid.moveTo(this, (int) myPoint.getX(), (int) myPoint.getY());
-
 			moved = true;
 		}
 	}

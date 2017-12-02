@@ -2,6 +2,7 @@ package Agents;
 
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
+import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 import sajas.core.Agent;
 
@@ -14,8 +15,10 @@ public class ParkingFacilityAgent extends Agent {
 	private int y;
 	private int capacity;
 	private Grid<Object> grid;
+	private ContinuousSpace <Object > space;
 
-	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, String name, String operator, int x,
+
+	public ParkingFacilityAgent(ContinuousSpace <Object > space, Grid<Object> grid, String name, String operator, int x,
 			int y, int capacity) {
 		this.name = name;
 		this.operator = operator;
@@ -23,10 +26,11 @@ public class ParkingFacilityAgent extends Agent {
 		this.y = y;
 		this.capacity = capacity;
 		this.grid = grid;
+		this.space = space;
 	}
 
 	@Watch(watcheeClassName = "ParkingSimulation.Agents.Driver", watcheeFieldNames = "moved", query = "within_moore 1", whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void processDriver() {
+	public void run() {
 
 	}
 
