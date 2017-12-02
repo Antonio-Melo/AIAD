@@ -37,7 +37,11 @@ public class ParkingFacilityAgent extends Agent {
 	public void run() {
 
 	}
-
+	
+	public String getParkName() {
+		return this.name;
+	}
+	
 	public String getOperator() {
 		return operator;
 	}
