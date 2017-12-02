@@ -9,7 +9,7 @@ import repast.simphony.space.grid.GridPoint;
 import java.util.Random;
 import sajas.core.Agent;
 
-public class DriverAgent extends Agent {
+public abstract class DriverAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	private static int IDNumber = 0;
@@ -155,6 +155,8 @@ public class DriverAgent extends Agent {
 		return maxUtility - priceCoefficient * Math.pow(priceUtility, POWER_U)
 				- walkingDistCoefficient * Math.pow(walkingDistUtility, POWER_V);
 	}
+	
+	public abstract ParkingFacilityAgent getNextPark();
 
 	public int getID() {
 		return ID;
