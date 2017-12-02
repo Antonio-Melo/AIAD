@@ -13,47 +13,82 @@ public class DriverAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	private static int IDNumber = 0;
-	private static final double ALPHA = 0.5; // Constant that scales the
-												// importance of the parking
-												// price for the drivers of a
-												// simulation
-	private static final double BETA = 0.5; // Constant that scales the
-											// importance of the walking
-											// distance for the drivers of a
-											// simulation
-	private static final double POWER_U = 0.9; // Powers applied to the
-												// calculated price or walking
-												// distance to
-	private static final double POWER_V = 0.9; // simulate the non-linearity of
-												// the impact an increase on
-												// walking distance or price has
-	private static final double COEF_MIN = 1.0; // Minimum value of the parking
-												// or walking distance
-												// coefficient
-	private static final double COEF_MAX = 1.5; // Maximum value of the parking
-												// or walking distance
-												// coefficient
-	private static final double UTILITY_MAX = 1000; // Maximum attributable
-													// ideal utility (maximum
-													// utility)
-	private static final double WORST_UTILITY = -1000; // Utility value
-														// attributed when the
-														// driver cannot find a
-														// suitable parking
-														// space
+
+	/*
+	 * Constant that scales the importance of the parking price for the drivers
+	 * of a simulation
+	 */
+	private static final double ALPHA = 0.5;
+
+	/*
+	 * Constant that scales the importance of the walking distance for the
+	 * drivers of a simulation
+	 */
+	private static final double BETA = 0.5;
+
+	/*
+	 * Powers applied to the calculated price or walking distance costs to
+	 * simulate the non-linearity of the impact an increase on walking distance
+	 * or price has on a driver's utlility
+	 */
+	private static final double POWER_U = 0.9;
+	private static final double POWER_V = 0.9;
+
+	/*
+	 * Minimum value of the parking or walking distance coefficient
+	 */
+	private static final double COEF_MIN = 1.0;
+
+	/*
+	 * Maximum value of the parking or walking distance coefficient
+	 */
+	private static final double COEF_MAX = 1.5;
+	/*
+	 * Maximum attributable ideal utility (maximum utility)
+	 */
+	private static final double UTILITY_MAX = 1000;
+
+	/*
+	 * Utility value attributed when the driver cannot find a suitable parking
+	 * space
+	 */
+	private static final double WORST_UTILITY = -1000;
 	private int ID;
+
+	/*
+	 * Driver's starting coordinates
+	 */
 	private int startX;
 	private int startY;
+
+	/*
+	 * Destination coordinates
+	 */
 	private int destinationX;
 	private int destinationY;
+
+	/*
+	 * Time of arrival at destination
+	 */
 	private int arrival;
 	private float maxPricePerHour;
 	private int durationOfStay;
 	private int maxWalkingDistance;
 	private int initialTime;
 	private int day;
+
+	/*
+	 * Coefficients that scale the cost of the price and walking distance,
+	 * respectively, in order to represent the relative importance of the
+	 * parking price or distance to the destination
+	 */
 	private double priceCoefficient;
 	private double walkingDistCoefficient;
+
+	/*
+	 * Maximum utility a driver can have, if the parking place was free and on
+	 * the same point as the destination
+	 */
 	private double maxUtility;
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
@@ -78,17 +113,11 @@ public class DriverAgent extends Agent {
 		this.grid = grid;
 		this.space = space;
 		Random random = new Random();
-		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble()); // sets
-																							// the
-																							// var
-																							// as
-																							// a
-																							// random
-																							// number
-																							// between
-																							// COEF_MIN
-																							// and
-																							// COEF_MAX
+
+		/*
+		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
+		 */
+		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
 	}
@@ -117,7 +146,7 @@ public class DriverAgent extends Agent {
 	public double utilityValue(ParkingFacilityAgent parkingFacility) {
 		double pricePerHour = parkingFacility.getPricePerHour();
 		double priceUtility = ALPHA * pricePerHour * durationOfStay;
-		
+
 		NdPoint parkingFacilityPoint = new NdPoint(parkingFacility.getX(), parkingFacility.getY());
 		NdPoint destinationPoint = new NdPoint(destinationX, destinationY);
 		double distanceToDestination = space.getDistance(parkingFacilityPoint, destinationPoint);
