@@ -4,6 +4,8 @@
   <sizeMax>15.0</sizeMax>
   <sizeMin>1.0</sizeMin>
   <sizeScale>1.0</sizeScale>
+  <sizeMethodName>getCapacity</sizeMethodName>
+  <sizeMaxMethodName>getCapacity</sizeMaxMethodName>
   <label></label>
   <labelMethod>getCapacity</labelMethod>
   <labelPosition>bottom</labelPosition>
@@ -18,9 +20,9 @@
     <float>0.0</float>
   </labelColor>
   <color>
-    <float>0.0</float>
-    <float>0.0</float>
     <float>1.0</float>
+    <float>1.0</float>
+    <float>0.0</float>
   </color>
   <colorMax>
     <float>10.0</float>

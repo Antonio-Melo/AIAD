@@ -14,16 +14,20 @@ public class ParkingFacilityAgent extends Agent {
 	private int x;
 	private int y;
 	private int capacity;
+	private float priceHour;
+	private float maxPrice;
 	private Grid<Object> grid;
 	private ContinuousSpace <Object > space;
 
 
 	public ParkingFacilityAgent(ContinuousSpace <Object > space, Grid<Object> grid, String name, String operator, int x,
-			int y, int capacity) {
+			int y, int capacity, float priceHour, float maxPrice) {
 		this.name = name;
 		this.operator = operator;
 		this.x = x;
 		this.y = y;
+		this.priceHour = priceHour;
+		this.maxPrice = maxPrice;
 		this.capacity = capacity;
 		this.grid = grid;
 		this.space = space;

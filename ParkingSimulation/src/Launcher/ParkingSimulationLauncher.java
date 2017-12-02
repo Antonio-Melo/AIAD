@@ -1,6 +1,7 @@
 package Launcher;
 
 import Agents.DriverAgent;
+import Agents.ParkingFacilityAgent;
 import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -79,18 +80,34 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		context.setId("ParkingSimulation");
 		
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);	
-		ContinuousSpace <Object > space = spaceFactory.createContinuousSpace("space", context , new RandomCartesianAdder<Object >(), new repast.simphony.space.continuous.StrictBorders(), 50, 50);
+		ContinuousSpace <Object > space = spaceFactory.createContinuousSpace("space", context , new RandomCartesianAdder<Object >(), new repast.simphony.space.continuous.StrictBorders(), 120, 80);
 		
 		GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
 
 		// Set the boolean to true if more than one car can ocupy the same space
 		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
-				new StrictBorders(), new SimpleGridAdder<Object>(), true, 50, 50));
+				new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
 
 		
 		for(int i = 0; i < driversCount; i++) {
 			context.add(new DriverAgent(space, grid, i, i, 50-i, 50-i, i, i, i, i, i, i));
 		}
+		
+		context.add(new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 1, 35, 698, (float) 1.43, (float) 9));
+		context.add(new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 25, 500, (float) 2.22, (float) 13));
+		context.add(new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 10, 44, 351, (float) 2.22, (float) 13));
+		context.add(new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 32, 47, 407, (float) 2.73, (float) 25));
+		context.add(new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 18, 58, 335, (float) 1.89, (float) 13));
+		context.add(new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 26, 59, 1082, (float) 2.73, (float) 25));
+		context.add(new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 42, 61, 545, (float) 3.53, (float) 35));
+		context.add(new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 11, 65, (float) 1.89, (float) 13));
+		context.add(new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 19, 350, (float) 2.73, (float) 25));
+		context.add(new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 47, 449, (float) 2.22, (float) 13));
+		context.add(new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 64, 297, (float) 2.22, (float) 13));
+		context.add(new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 84, 29, 303, (float) 1.43, (float) 25));
+		context.add(new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 87, 41, 610, (float) 1.43, (float) 25));
+
+
 		
 		for(Object obj : context) {
 			NdPoint pt = space.getLocation(obj);
