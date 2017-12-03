@@ -1,5 +1,8 @@
 package Agents;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -13,9 +16,11 @@ public class ParkingFacilityAgent extends Agent {
 	private String operator;
 	private int x;
 	private int y;
+	private int currentCapacity;
 	private int capacity;
 	private float priceHour;
 	private float maxPrice;
+	private List<DriverAgent> driversInsideThePark;
 	private Grid<Object> grid;
 	private ContinuousSpace <Object > space;
 
@@ -28,7 +33,9 @@ public class ParkingFacilityAgent extends Agent {
 		this.y = y;
 		this.priceHour = priceHour;
 		this.maxPrice = maxPrice;
+		this.currentCapacity = 0;
 		this.capacity = capacity;
+		this.driversInsideThePark = new ArrayList<DriverAgent>();
 		this.grid = grid;
 		this.space = space;
 	}
@@ -52,5 +59,9 @@ public class ParkingFacilityAgent extends Agent {
 
 	public int getCapacity() {
 		return capacity;
+	}
+	
+	public boolean isFull() {
+		return currentCapacity == capacity;
 	}
 }
