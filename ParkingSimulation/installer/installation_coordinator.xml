@@ -1,13 +1,10 @@
 <?xml version="1.0"?>
 
-<!-- Copies the user files to a temp directory and starts the IzPack installer
-     builder.
-     
-     Created by Michael J. North
-     			Jonathan Ozik
-     -->
+<!-- Copies the user files to a temp directory and starts the IzPack installer 
+	builder. Created by Michael J. North Jonathan Ozik -->
 
-<project name="BuildModelInstaller" default="BuildUserModelInstaller" basedir="..">
+<project name="BuildModelInstaller" default="BuildUserModelInstaller"
+	basedir="..">
 
 	<target name="BuildUserModelInstaller">
 
@@ -29,11 +26,13 @@
 		<echo message="Groovy_All_Jar = ${Groovy_All_Jar}" />
 		<property name="GroovyAllJarLocation" value="${GroovyLibDirectory}/${Groovy_All_Jar}" />
 
-		<!-- A hidden staging dirctory to store the install files that will be deleted at cleanup -->
+		<!-- A hidden staging dirctory to store the install files that will be 
+			deleted at cleanup -->
 		<property name="StagingArea" value="./.temp/ParkingSimulation" />
 		<property name="StagingOptionalArea" value="./.temp" />
 		<echo message="StagingArea = ${StagingArea}" />
-		<property name="IzPackHomeDirectory" value="${EclipsePluginsDirectory}/repast.simphony.eclipse_${REPAST_VERSION}/setupfiles/IzPack" />
+		<property name="IzPackHomeDirectory"
+			value="${EclipsePluginsDirectory}/repast.simphony.eclipse_${REPAST_VERSION}/setupfiles/IzPack" />
 		<echo message="IzPackHomeDirectory = ${IzPackHomeDirectory}" />
 
 
@@ -50,7 +49,7 @@
 			<fileset dir="${StagingOptionalArea}" includes="**/*" />
 		</delete>
 
-		<!-- Copy files to the temporary staging area except those filtered-->
+		<!-- Copy files to the temporary staging area except those filtered -->
 		<echo message="Setting up the temporary staging area..." />
 		<copy todir="${StagingArea}" overwrite="true" failonerror="false">
 			<fileset dir="." casesensitive="no">
@@ -60,7 +59,8 @@
 		</copy>
 
 		<!-- Copy optional files to a separate directory -->
-		<copy todir="${StagingOptionalArea}" overwrite="true" failonerror="false">
+		<copy todir="${StagingOptionalArea}" overwrite="true"
+			failonerror="false">
 			<fileset dir="." casesensitive="no">
 				<include name="**/src/**" />
 				<include name="**/docs/**" />

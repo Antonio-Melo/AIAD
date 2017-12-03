@@ -44,7 +44,11 @@ public class ParkingFacilityAgent extends Agent {
 	public void run() {
 
 	}
-
+	
+	public String getParkName() {
+		return this.name;
+	}
+	
 	public String getOperator() {
 		return operator;
 	}
@@ -60,8 +64,11 @@ public class ParkingFacilityAgent extends Agent {
 	public int getCapacity() {
 		return capacity;
 	}
-	
 	public boolean isFull() {
 		return currentCapacity == capacity;
+	}
+
+	public double getPricePerHour() {
+		return priceHour;
 	}
 }
