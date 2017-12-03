@@ -57,4 +57,8 @@ public class ParkingFacilityAgent extends Agent {
 	public int getCapacity() {
 		return capacity;
 	}
+
+	public double getPricePerHour() {
+		return priceHour;
+	}
 }

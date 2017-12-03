@@ -1,6 +1,8 @@
 package Launcher;
 
 import Agents.DriverAgent;
+import Agents.ExplorerDriverAgent;
+import Agents.GuidedDriverAgent;
 import Agents.ParkingFacilityAgent;
 import jade.core.AID;
 import jade.core.Profile;
@@ -62,8 +64,9 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		for (int i = 0; i < N_DRIVERS; i++) {
 
 			// TODO: Set Agents properties
-			DriverAgent a = new DriverAgent(space, grid, i, i, i, i, i, i, i, i, i, i);
-
+			DriverAgent a = new ExplorerDriverAgent(space, grid, i, i, i, i, i, i, i, i, i, i);
+			
+			
 			try {
 				agentContainer.acceptNewAgent("Driver " + a.getID(), a).start();
 			} catch (StaleProxyException e) {
@@ -105,8 +108,11 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		
 		
 		DriverAgent[] drivers = new DriverAgent[driversCount];
-		for(int i = 0; i < driversCount; i++) {
-			drivers[i] = new DriverAgent(space, grid, i, i, 120-i, 80-i, i, i, i, i, i, i);
+		for(int i = 0; i < driversCount/2; i++) {
+			drivers[i] = new ExplorerDriverAgent(space, grid, i, i, 120-i, 80-i, i, i, i, i, i, i);
+		}
+		for(int i = driversCount/2; i < driversCount; i++) {
+			drivers[i] = new GuidedDriverAgent(space, grid, i, i, 120-i, 80-i, i, i, i, i, i, i);
 		}
 
 		for(DriverAgent obj : drivers) {

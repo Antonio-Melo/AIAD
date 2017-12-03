@@ -91,7 +91,7 @@ public abstract class DriverAgent extends Agent {
 	 */
 	private double maxUtility;
 	private Grid<Object> grid;
-	private ContinuousSpace<Object> space;
+	protected ContinuousSpace<Object> space;
 	private boolean moved;
 
 	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
