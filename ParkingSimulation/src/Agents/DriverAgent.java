@@ -1,11 +1,15 @@
 package Agents;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.query.space.grid.GridCell;
+import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.space.SpatialMath;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
+
+import java.util.List;
 import java.util.Random;
 import sajas.core.Agent;
 
@@ -110,10 +114,13 @@ public abstract class DriverAgent extends Agent {
 	private Grid<Object> grid;
 	protected ContinuousSpace<Object> space;
 	private boolean moved;
+	protected GridPoint target;
+	private ParkingFacilityAgent[] parkingFacilities;
+	
 
 	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
 			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
-			int initialTime, int day) {
+			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) {
 
 		IDNumber++;
 		ID = IDNumber;
@@ -130,6 +137,7 @@ public abstract class DriverAgent extends Agent {
 		this.grid = grid;
 		this.space = space;
 		Random random = new Random();
+		this.parkingFacilities = parkingFacilities;
 
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
@@ -137,6 +145,13 @@ public abstract class DriverAgent extends Agent {
 		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
+		
+		
+	}
+	
+	@ScheduledMethod(start = 1, interval = 1)
+	public void drive() {	
+		moveTowards(target);	
 	}
 
 	public void moveTowards(GridPoint pt) {
