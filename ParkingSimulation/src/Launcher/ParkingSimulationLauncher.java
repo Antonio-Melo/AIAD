@@ -1,5 +1,8 @@
 package Launcher;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import Agents.DriverAgent;
 import Agents.ExplorerDriverAgent;
 import Agents.GuidedDriverAgent;
@@ -105,10 +108,20 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		
 		DriverAgent[] drivers = new DriverAgent[driversCount];
 		for(int i = 0; i < driversCount/2; i++) {
-			drivers[i] = new ExplorerDriverAgent(space, grid, i, i, 120-i, 80-i, i, i, i, i, i, i, parkingFacilities);
+			try {
+				drivers[i] = new ExplorerDriverAgent(space, grid, i, i, 119-i, 79-i, i, i, i, i, i, i, parkingFacilities);
+			} catch (SecurityException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		for(int i = driversCount/2; i < driversCount; i++) {
-			drivers[i] = new GuidedDriverAgent(space, grid, i, i, 120-i, 80-i, i, i, i, i, i, i, parkingFacilities);
+			try {
+				drivers[i] = new GuidedDriverAgent(space, grid, i, i, 119-i, 79-i, i, i, i, i, i, i, parkingFacilities);
+			} catch (SecurityException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		for(DriverAgent obj : drivers) {

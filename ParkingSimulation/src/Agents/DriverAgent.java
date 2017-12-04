@@ -11,12 +11,24 @@ import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import repast.simphony.util.ContextUtils;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
+
+import javassist.bytecode.stackmap.TypeData.ClassName;
 import sajas.core.Agent;
 
 public abstract class DriverAgent extends Agent {
 
+	protected final Logger logger = Logger.getLogger(ClassName.class.getName() + IDNumber);
+	
 	private static final long serialVersionUID = 1L;
 	private static int IDNumber = 0;
 
@@ -141,7 +153,7 @@ public abstract class DriverAgent extends Agent {
 
 	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
 			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
-			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) {
+			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
@@ -160,6 +172,12 @@ public abstract class DriverAgent extends Agent {
 		Random random = new Random();
 		this.state = DriverState.DRIVING;
 		this.parkingFacilities = parkingFacilities;
+		
+		logger.setUseParentHandlers(false);
+		FileHandler fh = new FileHandler("logs/drivers/Driver-"+ID+".txt");
+		fh.setFormatter(new SimpleFormatter());
+		logger.addHandler(fh);
+		logger.info("Driver initialized with destination: " + destinationX + ", " + destinatioY);
 
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
@@ -229,8 +247,10 @@ public abstract class DriverAgent extends Agent {
 		targetPark = getNextPark();
 		if (targetPark != null) {
 			target = new GridPoint(targetPark.getX(), targetPark.getY());
+			this.logger.fine("Set target to park " + targetPark.getParkName());
 			return true;
 		}
+		this.logger.fine("No suitable park found");
 		return false;
 	}
 
@@ -238,6 +258,7 @@ public abstract class DriverAgent extends Agent {
 		if (targetPark == null || targetPark.isFull())
 			return false;
 
+		this.logger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;
 		targetPark.parkCar();
 		return true;
