@@ -93,16 +93,16 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		ParkingFacilityAgent[] parkingFacilities = {new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, (float) 1.43, (float) 9),
 				new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 65, 500, (float) 2.22, (float) 13),
 				new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 44, 71, 351, (float) 2.22, (float) 13),
-				new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 32, 33, 407, (float) 2.73, (float) 25),
-				new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 18, 22, 335, (float) 1.89, (float) 13),
-				new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 26, 21, 1082, (float) 2.73, (float) 25),
-				new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 42, 19, 545, (float) 3.53, (float) 35),
+				new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 47, 49, 407, (float) 2.73, (float) 25),
+				new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 58, 63, 335, (float) 1.89, (float) 13),
+				new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 59, 55, 1082, (float) 2.73, (float) 25),
+				new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 61, 38, 545, (float) 3.53, (float) 35),
 				new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 69, 65, (float) 1.89, (float) 13),
-				new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 61, 350, (float) 2.73, (float) 25),
-				new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 33, 449, (float) 2.22, (float) 13),
-				new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 16, 297, (float) 2.22, (float) 13),
-				new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 84, 51, 303, (float) 1.43, (float) 25),
-				new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 87, 39, 610, (float) 1.43, (float) 25)
+				new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 62, 350, (float) 2.73, (float) 25),
+				new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 34, 449, (float) 2.22, (float) 13),
+				new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 17, 297, (float) 2.22, (float) 13),
+				new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 90, 51, 303, (float) 1.43, (float) 25),
+				new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 88, 40, 610, (float) 1.43, (float) 25)
 			};
 		
 		

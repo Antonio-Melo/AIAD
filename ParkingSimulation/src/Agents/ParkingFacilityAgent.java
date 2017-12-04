@@ -72,7 +72,7 @@ public class ParkingFacilityAgent extends Agent {
 		numCars++;
 	}
 
-	public float getPricePerHour() {
+	public double getPricePerHour() {
 		return priceHour;
 	}
 }
