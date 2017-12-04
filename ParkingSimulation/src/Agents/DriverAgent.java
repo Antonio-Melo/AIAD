@@ -190,17 +190,28 @@ public abstract class DriverAgent extends Agent {
 	@ScheduledMethod(start = 1, interval = 1)
 	public void drive() {
 		// Only move if we are not already on target
-		if (!target.equals(grid.getLocation(this)))
-			moveTowards(target);
-		else { // reached target
-			if (!park()) {
-				/* Could not park, or target wasn't park */
-				if (!setNextPark()) {
-					/* No suitable park found */
-					achievedUtility = DriverAgent.WORST_UTILITY;
-					Context<Object> context = ContextUtils.getContext(this);
-					context.remove(this);
+		
+		if(this.state == DriverState.PARKED) {
+			if(durationOfStay > 0)
+				durationOfStay--;
+			else {
+				Context<Object> context = ContextUtils.getContext(this);
+				context.remove(this);
+			}
+		}else {
+			if (!target.equals(grid.getLocation(this)))
+				moveTowards(target);
+			else { // reached target
+				if (!park()) {
+					/* Could not park, or target wasn't park */
+					if (!setNextPark()) {
+						/* No suitable park found */
+						achievedUtility = DriverAgent.WORST_UTILITY;
+						Context<Object> context = ContextUtils.getContext(this);
+						context.remove(this);
+					}
 				}
+				
 			}
 		}
 	}
