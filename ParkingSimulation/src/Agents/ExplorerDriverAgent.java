@@ -18,7 +18,7 @@ public class ExplorerDriverAgent extends DriverAgent {
 		super(space, grid, startX, startY, destinationX, destinatioY, arrival, maxPricePerHour, durationOfStay,
 				maxWalkingDistance, initialTime, day, parkingFacilities);
 		this.parkList = new ArrayList<>(Arrays.asList(parkingFacilities));
-		
+
 		this.target = new GridPoint(this.getDestinationX(), this.getDestinationY());
 	}
 
@@ -45,7 +45,7 @@ public class ExplorerDriverAgent extends DriverAgent {
 				closestParkIndex = i;
 			}
 		}
-		
+
 		// Returns the closest park, and removes it from the list
 		return parkList.remove(closestParkIndex);
 	}
