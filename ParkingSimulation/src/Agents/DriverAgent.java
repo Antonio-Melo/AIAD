@@ -71,9 +71,22 @@ public abstract class DriverAgent extends Agent {
 	 * Time of arrival at destination
 	 */
 	private int arrival;
+
+	/*
+	 * Maximum price the driver is willing to pay per hour
+	 */
 	private float maxPricePerHour;
-	private int durationOfStay;
+
+	/*
+	 * Maximum walking distance from the park to the destination that the driver
+	 * is wiling to walk
+	 */
 	private int maxWalkingDistance;
+
+	/*
+	 * Duration (in hours) of the stay in the park
+	 */
+	private int durationOfStay;
 	private int initialTime;
 	private int day;
 
@@ -90,6 +103,10 @@ public abstract class DriverAgent extends Agent {
 	 * the same point as the destination
 	 */
 	private double maxUtility;
+
+	/*
+	 * Repast variables
+	 */
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
 	private boolean moved;
@@ -123,7 +140,6 @@ public abstract class DriverAgent extends Agent {
 	}
 
 	public void moveTowards(GridPoint pt) {
-
 		// only move if we are not already in this grid location
 		if (!pt.equals(grid.getLocation(this))) {
 			NdPoint myPoint = space.getLocation(this);
@@ -155,7 +171,7 @@ public abstract class DriverAgent extends Agent {
 		return maxUtility - priceCoefficient * Math.pow(priceUtility, POWER_U)
 				- walkingDistCoefficient * Math.pow(walkingDistUtility, POWER_V);
 	}
-	
+
 	public abstract ParkingFacilityAgent getNextPark();
 
 	public int getID() {
