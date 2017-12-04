@@ -1,6 +1,8 @@
 package Launcher;
 
 import Agents.DriverAgent;
+import Agents.ExplorerDriverAgent;
+import Agents.GuidedDriverAgent;
 import Agents.ParkingFacilityAgent;
 import jade.core.AID;
 import jade.core.Profile;
@@ -62,8 +64,9 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		for (int i = 0; i < N_DRIVERS; i++) {
 
 			// TODO: Set Agents properties
-			DriverAgent a = new DriverAgent(space, grid, i, i, i, i, i, i, i, i, i, i);
-
+			DriverAgent a = new ExplorerDriverAgent(space, grid, i, i, i, i, i, i, i, i, i, i);
+			
+			
 			try {
 				agentContainer.acceptNewAgent("Driver " + a.getID(), a).start();
 			} catch (StaleProxyException e) {
@@ -88,30 +91,40 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
 				new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
 
+		ParkingFacilityAgent[] parkingFacilities = {new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 35, 698, (float) 1.43, (float) 9),
+				new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 25, 500, (float) 2.22, (float) 13),
+				new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 10, 44, 351, (float) 2.22, (float) 13),
+				new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 32, 47, 407, (float) 2.73, (float) 25),
+				new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 18, 58, 335, (float) 1.89, (float) 13),
+				new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 26, 59, 1082, (float) 2.73, (float) 25),
+				new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 42, 61, 545, (float) 3.53, (float) 35),
+				new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 11, 65, (float) 1.89, (float) 13),
+				new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 19, 350, (float) 2.73, (float) 25),
+				new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 47, 449, (float) 2.22, (float) 13),
+				new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 64, 297, (float) 2.22, (float) 13),
+				new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 84, 29, 303, (float) 1.43, (float) 25),
+				new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 87, 41, 610, (float) 1.43, (float) 25)
+			};
 		
-		for(int i = 0; i < driversCount; i++) {
-			context.add(new DriverAgent(space, grid, i, i, 50-i, 50-i, i, i, i, i, i, i));
+		
+		DriverAgent[] drivers = new DriverAgent[driversCount];
+		for(int i = 0; i < driversCount/2; i++) {
+			drivers[i] = new ExplorerDriverAgent(space, grid, i, i, 120-i, 80-i, i, i, i, i, i, i);
+		}
+		for(int i = driversCount/2; i < driversCount; i++) {
+			drivers[i] = new GuidedDriverAgent(space, grid, i, i, 120-i, 80-i, i, i, i, i, i, i);
+		}
+
+		for(DriverAgent obj : drivers) {
+			context.add(obj);
+			space.moveTo(obj, obj.getStartX(), obj.getStartY());
+			grid.moveTo(obj, obj.getStartX(), obj.getStartY());
 		}
 		
-		context.add(new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 1, 35, 698, (float) 1.43, (float) 9));
-		context.add(new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 25, 500, (float) 2.22, (float) 13));
-		context.add(new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 10, 44, 351, (float) 2.22, (float) 13));
-		context.add(new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 32, 47, 407, (float) 2.73, (float) 25));
-		context.add(new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 18, 58, 335, (float) 1.89, (float) 13));
-		context.add(new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 26, 59, 1082, (float) 2.73, (float) 25));
-		context.add(new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 42, 61, 545, (float) 3.53, (float) 35));
-		context.add(new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 11, 65, (float) 1.89, (float) 13));
-		context.add(new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 19, 350, (float) 2.73, (float) 25));
-		context.add(new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 47, 449, (float) 2.22, (float) 13));
-		context.add(new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 64, 297, (float) 2.22, (float) 13));
-		context.add(new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 84, 29, 303, (float) 1.43, (float) 25));
-		context.add(new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 87, 41, 610, (float) 1.43, (float) 25));
-
-
-		
-		for(Object obj : context) {
-			NdPoint pt = space.getLocation(obj);
-			grid.moveTo(obj, (int)pt.getX(), (int)pt.getY());
+		for(ParkingFacilityAgent obj : parkingFacilities) {
+			context.add(obj);
+			space.moveTo(obj, obj.getX(), obj.getY());
+			grid.moveTo(obj, obj.getX(), obj.getY());
 		}
 		
 		return super.build(context);
