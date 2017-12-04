@@ -1,5 +1,7 @@
 package Agents;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.PriorityQueue;
 
 import Utilities.ParkingFacilityComparator;
@@ -13,7 +15,8 @@ public class GuidedDriverAgent extends DriverAgent {
 
 	public GuidedDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
 			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
-			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) {
+			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities)
+			throws SecurityException, IOException {
 		super(space, grid, startX, startY, destinationX, destinatioY, arrival, maxPricePerHour, durationOfStay,
 				maxWalkingDistance, initialTime, day, parkingFacilities);
 
@@ -33,6 +36,7 @@ public class GuidedDriverAgent extends DriverAgent {
 	 */
 	@Override
 	public ParkingFacilityAgent getNextPark() {
+		this.logger.finer("Checking next park");
 		return parkList.poll();
 	}
 

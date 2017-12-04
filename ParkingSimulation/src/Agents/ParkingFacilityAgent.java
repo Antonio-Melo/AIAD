@@ -39,7 +39,7 @@ public class ParkingFacilityAgent extends Agent {
 		this.space = space;
 	}
 
-	@Watch(watcheeClassName = "ParkingSimulation.Agents.Driver", watcheeFieldNames = "moved", query = "within_moore 1", whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	//@Watch(watcheeClassName = "ParkingSimulation.Agents.DriverAgent", watcheeFieldNames = "moved", query = "within_moore 1", whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void run() {
 
 	}
