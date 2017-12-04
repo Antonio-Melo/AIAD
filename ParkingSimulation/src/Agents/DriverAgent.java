@@ -1,5 +1,6 @@
 package Agents;
 
+import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.query.space.grid.GridCell;
 import repast.simphony.query.space.grid.GridCellNgh;
@@ -8,13 +9,26 @@ import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
+import repast.simphony.util.ContextUtils;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
+
+import javassist.bytecode.stackmap.TypeData.ClassName;
 import sajas.core.Agent;
 
 public abstract class DriverAgent extends Agent {
 
+	protected final Logger logger = Logger.getLogger(ClassName.class.getName() + IDNumber);
+	
 	private static final long serialVersionUID = 1L;
 	private static int IDNumber = 0;
 
@@ -22,41 +36,50 @@ public abstract class DriverAgent extends Agent {
 	 * Constant that scales the importance of the parking price for the drivers
 	 * of a simulation
 	 */
-	private static final double ALPHA = 0.5;
+	public static final double ALPHA = 0.5;
 
 	/*
 	 * Constant that scales the importance of the walking distance for the
 	 * drivers of a simulation
 	 */
-	private static final double BETA = 0.5;
+	public static final double BETA = 0.5;
 
 	/*
 	 * Powers applied to the calculated price or walking distance costs to
 	 * simulate the non-linearity of the impact an increase on walking distance
 	 * or price has on a driver's utlility
 	 */
-	private static final double POWER_U = 0.9;
-	private static final double POWER_V = 0.9;
+	public static final double POWER_U = 0.9;
+	public static final double POWER_V = 0.9;
 
 	/*
 	 * Minimum value of the parking or walking distance coefficient
 	 */
-	private static final double COEF_MIN = 1.0;
+	public static final double COEF_MIN = 1.0;
 
 	/*
 	 * Maximum value of the parking or walking distance coefficient
 	 */
-	private static final double COEF_MAX = 1.5;
+	public static final double COEF_MAX = 1.5;
+
 	/*
 	 * Maximum attributable ideal utility (maximum utility)
 	 */
-	private static final double UTILITY_MAX = 1000;
+	public static final double UTILITY_MAX = 1000;
 
 	/*
 	 * Utility value attributed when the driver cannot find a suitable parking
 	 * space
 	 */
-	private static final double WORST_UTILITY = -1000;
+	public static final double WORST_UTILITY = -1000;
+
+	/*
+	 * Driver's state, either driving or parked
+	 */
+	public static enum DriverState {
+		DRIVING, PARKED
+	};
+
 	private int ID;
 
 	/*
@@ -64,6 +87,11 @@ public abstract class DriverAgent extends Agent {
 	 */
 	private int startX;
 	private int startY;
+
+	/*
+	 * Current driver state
+	 */
+	protected DriverState state;
 
 	/*
 	 * Destination coordinates
@@ -79,7 +107,7 @@ public abstract class DriverAgent extends Agent {
 	/*
 	 * Maximum price the driver is willing to pay per hour
 	 */
-	private float maxPricePerHour;
+	private double maxPricePerHour;
 
 	/*
 	 * Maximum walking distance from the park to the destination that the driver
@@ -109,6 +137,11 @@ public abstract class DriverAgent extends Agent {
 	private double maxUtility;
 
 	/*
+	 * Utility reached by the driver
+	 */
+	protected double achievedUtility;
+
+	/*
 	 * Repast variables
 	 */
 	private Grid<Object> grid;
@@ -116,11 +149,11 @@ public abstract class DriverAgent extends Agent {
 	private boolean moved;
 	protected GridPoint target;
 	private ParkingFacilityAgent[] parkingFacilities;
-	
+	protected ParkingFacilityAgent targetPark;
 
 	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
 			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
-			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) {
+			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
@@ -137,7 +170,14 @@ public abstract class DriverAgent extends Agent {
 		this.grid = grid;
 		this.space = space;
 		Random random = new Random();
+		this.state = DriverState.DRIVING;
 		this.parkingFacilities = parkingFacilities;
+		
+		logger.setUseParentHandlers(false);
+		FileHandler fh = new FileHandler("logs/drivers/Driver-"+ID+".txt");
+		fh.setFormatter(new SimpleFormatter());
+		logger.addHandler(fh);
+		logger.info("Driver initialized with destination: " + destinationX + ", " + destinatioY);
 
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
@@ -145,26 +185,34 @@ public abstract class DriverAgent extends Agent {
 		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
-		
-		
 	}
-	
+
 	@ScheduledMethod(start = 1, interval = 1)
-	public void drive() {	
-		moveTowards(target);	
+	public void drive() {
+		// Only move if we are not already on target
+		if (!target.equals(grid.getLocation(this)))
+			moveTowards(target);
+		else { // reached target
+			if (!park()) {
+				/* Could not park, or target wasn't park */
+				if (!setNextPark()) {
+					/* No suitable park found */
+					achievedUtility = DriverAgent.WORST_UTILITY;
+					Context<Object> context = ContextUtils.getContext(this);
+					context.remove(this);
+				}
+			}
+		}
 	}
 
 	public void moveTowards(GridPoint pt) {
-		// only move if we are not already in this grid location
-		if (!pt.equals(grid.getLocation(this))) {
-			NdPoint myPoint = space.getLocation(this);
-			NdPoint otherPoint = new NdPoint(pt.getX(), pt.getY());
-			double angle = SpatialMath.calcAngleFor2DMovement(space, myPoint, otherPoint);
-			space.moveByVector(this, 1, angle, 0);
-			myPoint = space.getLocation(this);
-			grid.moveTo(this, (int) myPoint.getX(), (int) myPoint.getY());
-			moved = true;
-		}
+		NdPoint myPoint = space.getLocation(this);
+		NdPoint otherPoint = new NdPoint(pt.getX(), pt.getY());
+		double angle = SpatialMath.calcAngleFor2DMovement(space, myPoint, otherPoint);
+		space.moveByVector(this, 1, angle, 0);
+		myPoint = space.getLocation(this);
+		grid.moveTo(this, (int) myPoint.getX(), (int) myPoint.getY());
+		moved = true;
 	}
 
 	/**
@@ -188,6 +236,33 @@ public abstract class DriverAgent extends Agent {
 	}
 
 	public abstract ParkingFacilityAgent getNextPark();
+
+	/**
+	 * Gets the next park from the driver's list and sets it as the target
+	 * 
+	 * @return true if a park was successfully set false if there is no more
+	 *         parks to visit
+	 */
+	public boolean setNextPark() {
+		targetPark = getNextPark();
+		if (targetPark != null) {
+			target = new GridPoint(targetPark.getX(), targetPark.getY());
+			this.logger.fine("Set target to park " + targetPark.getParkName());
+			return true;
+		}
+		this.logger.fine("No suitable park found");
+		return false;
+	}
+
+	public boolean park() {
+		if (targetPark == null || targetPark.isFull())
+			return false;
+
+		this.logger.finer("Parked in park " + targetPark.getName());
+		this.state = DriverState.PARKED;
+		targetPark.parkCar();
+		return true;
+	}
 
 	public int getID() {
 		return ID;
@@ -213,7 +288,7 @@ public abstract class DriverAgent extends Agent {
 		return arrival;
 	}
 
-	public float getMaxPricePerHour() {
+	public double getMaxPricePerHour() {
 		return maxPricePerHour;
 	}
 

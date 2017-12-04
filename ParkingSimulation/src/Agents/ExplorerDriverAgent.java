@@ -1,5 +1,7 @@
 package Agents;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,11 +16,11 @@ public class ExplorerDriverAgent extends DriverAgent {
 
 	public ExplorerDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY,
 			int destinationX, int destinatioY, int arrival, float maxPricePerHour, int durationOfStay,
-			int maxWalkingDistance, int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) {
+			int maxWalkingDistance, int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
 		super(space, grid, startX, startY, destinationX, destinatioY, arrival, maxPricePerHour, durationOfStay,
 				maxWalkingDistance, initialTime, day, parkingFacilities);
 		this.parkList = new ArrayList<>(Arrays.asList(parkingFacilities));
-		
+
 		this.target = new GridPoint(this.getDestinationX(), this.getDestinationY());
 	}
 
@@ -45,7 +47,7 @@ public class ExplorerDriverAgent extends DriverAgent {
 				closestParkIndex = i;
 			}
 		}
-		
+
 		// Returns the closest park, and removes it from the list
 		return parkList.remove(closestParkIndex);
 	}

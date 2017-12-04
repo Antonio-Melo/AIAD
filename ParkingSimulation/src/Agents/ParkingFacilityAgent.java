@@ -16,16 +16,15 @@ public class ParkingFacilityAgent extends Agent {
 	private String operator;
 	private int x;
 	private int y;
-	private int currentCapacity;
+	private int numCars;
 	private int capacity;
 	private float priceHour;
 	private float maxPrice;
 	private List<DriverAgent> driversInsideThePark;
 	private Grid<Object> grid;
-	private ContinuousSpace <Object > space;
+	private ContinuousSpace<Object> space;
 
-
-	public ParkingFacilityAgent(ContinuousSpace <Object > space, Grid<Object> grid, String name, String operator, int x,
+	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, String name, String operator, int x,
 			int y, int capacity, float priceHour, float maxPrice) {
 		this.name = name;
 		this.operator = operator;
@@ -33,22 +32,22 @@ public class ParkingFacilityAgent extends Agent {
 		this.y = y;
 		this.priceHour = priceHour;
 		this.maxPrice = maxPrice;
-		this.currentCapacity = 0;
+		this.numCars = 0;
 		this.capacity = capacity;
 		this.driversInsideThePark = new ArrayList<DriverAgent>();
 		this.grid = grid;
 		this.space = space;
 	}
 
-	@Watch(watcheeClassName = "ParkingSimulation.Agents.Driver", watcheeFieldNames = "moved", query = "within_moore 1", whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	//@Watch(watcheeClassName = "ParkingSimulation.Agents.DriverAgent", watcheeFieldNames = "moved", query = "within_moore 1", whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void run() {
 
 	}
-	
+
 	public String getParkName() {
 		return this.name;
 	}
-	
+
 	public String getOperator() {
 		return operator;
 	}
@@ -64,8 +63,13 @@ public class ParkingFacilityAgent extends Agent {
 	public int getCapacity() {
 		return capacity;
 	}
+
 	public boolean isFull() {
-		return currentCapacity == capacity;
+		return numCars == capacity;
+	}
+
+	public void parkCar() {
+		numCars++;
 	}
 
 	public double getPricePerHour() {
