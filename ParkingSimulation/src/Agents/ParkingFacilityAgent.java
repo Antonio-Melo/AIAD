@@ -67,8 +67,8 @@ public class ParkingFacilityAgent extends Agent {
 	public boolean isFull() {
 		return currentCapacity == capacity;
 	}
-
-	public double getPricePerHour() {
+	
+	public float getPricePerHour() {
 		return priceHour;
 	}
-}
+
