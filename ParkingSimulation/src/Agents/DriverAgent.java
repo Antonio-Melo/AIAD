@@ -197,6 +197,7 @@ public abstract class DriverAgent extends Agent {
 			else {
 				Context<Object> context = ContextUtils.getContext(this);
 				context.remove(this);
+				targetPark.carLeavesPark();
 			}
 		}else {
 			if (!target.equals(grid.getLocation(this)))

@@ -17,6 +17,7 @@ import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.continuous.RandomCartesianAdder;
@@ -109,7 +110,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		DriverAgent[] drivers = new DriverAgent[driversCount];
 		for(int i = 0; i < driversCount/2; i++) {
 			try {
-				drivers[i] = new ExplorerDriverAgent(space, grid, i, i, 119-i, 79-i, i, i, i, i, i, i, parkingFacilities);
+				drivers[i] = new ExplorerDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119), RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(), RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
 			} catch (SecurityException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -117,7 +118,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		}
 		for(int i = driversCount/2; i < driversCount; i++) {
 			try {
-				drivers[i] = new GuidedDriverAgent(space, grid, i, i, 119-i, 79-i, i, i, i, i, i, i, parkingFacilities);
+				drivers[i] = new GuidedDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119), RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(), RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
 			} catch (SecurityException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

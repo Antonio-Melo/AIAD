@@ -71,6 +71,10 @@ public class ParkingFacilityAgent extends Agent {
 	public void parkCar() {
 		numCars++;
 	}
+	
+	public void carLeavesPark() {
+		numCars--;
+	}
 
 	public double getPricePerHour() {
 		return priceHour;
