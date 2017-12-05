@@ -270,13 +270,10 @@ public abstract class DriverAgent extends Agent {
 		targetPark = getNextPark();
 		if (targetPark != null) {
 			target = new GridPoint(targetPark.getX(), targetPark.getY());
-			
-			System.out.println("Park: " + targetPark.getX() + ":" + targetPark.getY());
 			this.logger.fine("Set target to park " + targetPark.getParkName());
 			return true;
 		}
 		this.logger.fine("No suitable park found");
-		System.out.println("No suitable park found");
 		return false;
 	}
 
