@@ -209,18 +209,9 @@ public abstract class DriverAgent extends Agent {
 					(target.getX() == (grid.getLocation(this).getX() - 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
 					(target.getX() == (grid.getLocation(this).getX()) && (target.getY() == (grid.getLocation(this).getY()))))
 					) {
-				
-				System.out.println("moving:::::");
-				System.out.println(target.getX());
-				System.out.println(grid.getLocation(this).getX());
-				System.out.println(target.getY());
-				System.out.println(grid.getLocation(this).getY());
+
 				moveTowards(target);
-				System.out.println("moving");
-				System.out.println(target.getX());
-				System.out.println(grid.getLocation(this).getX());
-				System.out.println(target.getY());
-				System.out.println(grid.getLocation(this).getY());
+
 			}
 			else { // reached target
 				if (!park()) {
