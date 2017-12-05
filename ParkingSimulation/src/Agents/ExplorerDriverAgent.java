@@ -29,18 +29,20 @@ public class ExplorerDriverAgent extends DriverAgent {
 	 */
 	@Override
 	public ParkingFacilityAgent getNextPark() {
-		if (parkList.isEmpty())
+		if (parkList.isEmpty()) {
 			return null;
+		}
+			
 
 		int closestParkIndex = 0;
-		NdPoint myPoint = space.getLocation(this);
-		NdPoint parkPoint = space.getLocation(parkList.get(0));
-		double closestParkDistance = space.getDistance(myPoint, parkPoint);
+		GridPoint myPoint = grid.getLocation(this);
+		GridPoint parkPoint = grid.getLocation(parkList.get(0));
+		double closestParkDistance = grid.getDistance(myPoint, parkPoint);
 		double distance;
 
 		for (int i = 1; i < parkList.size(); i++) {
-			parkPoint = space.getLocation(parkList.get(i));
-			distance = space.getDistance(myPoint, parkPoint);
+			parkPoint = grid.getLocation(parkList.get(i));
+			distance = grid.getDistance(myPoint, parkPoint);
 
 			if (distance < closestParkDistance) {
 				closestParkDistance = distance;
@@ -48,7 +50,7 @@ public class ExplorerDriverAgent extends DriverAgent {
 			}
 		}
 
-		// Returns the closest park, and removes it from the list
+		// Returns the closest park, and removes it from the list		
 		return parkList.remove(closestParkIndex);
 	}
 

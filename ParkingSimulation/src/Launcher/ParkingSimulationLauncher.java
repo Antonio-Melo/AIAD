@@ -39,7 +39,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private ContainerController agentContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private int driversCount = 25;
+	private int driversCount = 200;
 
 	public static void main(String[] args) {
 		ParkingSimulationLauncher model = new ParkingSimulationLauncher();
@@ -83,7 +83,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		context.setId("ParkingSimulation");
 		
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);	
-		ContinuousSpace <Object > space = spaceFactory.createContinuousSpace("space", context , new RandomCartesianAdder<Object >(), new repast.simphony.space.continuous.StrictBorders(), 120, 80);
+		space = spaceFactory.createContinuousSpace("space", context , new RandomCartesianAdder<Object >(), new repast.simphony.space.continuous.StrictBorders(), 120, 80);
 		
 		GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
 
@@ -125,16 +125,17 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			}
 		}
 
-		for(DriverAgent obj : drivers) {
-			context.add(obj);
-			space.moveTo(obj, obj.getStartX(), obj.getStartY());
-			grid.moveTo(obj, obj.getStartX(), obj.getStartY());
-		}
-		
 		for(ParkingFacilityAgent obj : parkingFacilities) {
 			context.add(obj);
 			space.moveTo(obj, obj.getX(), obj.getY());
 			grid.moveTo(obj, obj.getX(), obj.getY());
+		}
+		
+		
+		for(DriverAgent obj : drivers) {
+			context.add(obj);
+			space.moveTo(obj, obj.getStartX(), obj.getStartY());
+			grid.moveTo(obj, obj.getStartX(), obj.getStartY());
 		}
 		
 		return super.build(context);

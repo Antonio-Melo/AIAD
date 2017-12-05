@@ -144,7 +144,7 @@ public abstract class DriverAgent extends Agent {
 	/*
 	 * Repast variables
 	 */
-	private Grid<Object> grid;
+	protected Grid<Object> grid;
 	protected ContinuousSpace<Object> space;
 	private boolean moved;
 	protected GridPoint target;
@@ -200,8 +200,28 @@ public abstract class DriverAgent extends Agent {
 				targetPark.carLeavesPark();
 			}
 		}else {
-			if (!target.equals(grid.getLocation(this)))
+			/*
+			 * Checks if driver is in the target or in the cell right next to the target. This verification
+			 * is necessary due to the fact that the convertion from space point to grid point, sometimes
+			 * won't translate to the correct point of the target but to the point next to it.
+			 */
+			if (!((target.getX() == (grid.getLocation(this).getX() + 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
+					(target.getX() == (grid.getLocation(this).getX() - 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
+					(target.getX() == (grid.getLocation(this).getX()) && (target.getY() == (grid.getLocation(this).getY()))))
+					) {
+				
+				System.out.println("moving:::::");
+				System.out.println(target.getX());
+				System.out.println(grid.getLocation(this).getX());
+				System.out.println(target.getY());
+				System.out.println(grid.getLocation(this).getY());
 				moveTowards(target);
+				System.out.println("moving");
+				System.out.println(target.getX());
+				System.out.println(grid.getLocation(this).getX());
+				System.out.println(target.getY());
+				System.out.println(grid.getLocation(this).getY());
+			}
 			else { // reached target
 				if (!park()) {
 					/* Could not park, or target wasn't park */
@@ -259,10 +279,13 @@ public abstract class DriverAgent extends Agent {
 		targetPark = getNextPark();
 		if (targetPark != null) {
 			target = new GridPoint(targetPark.getX(), targetPark.getY());
+			
+			System.out.println("Park: " + targetPark.getX() + ":" + targetPark.getY());
 			this.logger.fine("Set target to park " + targetPark.getParkName());
 			return true;
 		}
 		this.logger.fine("No suitable park found");
+		System.out.println("No suitable park found");
 		return false;
 	}
 
