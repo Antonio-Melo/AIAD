@@ -34,12 +34,15 @@ import repast.simphony.space.grid.WrapAroundBorders;
 public class ParkingSimulationLauncher extends RepastSLauncher {
 
 	// Number of drivers to deploy
-	private static int N_DRIVERS = 10;
+	private static final int N_DRIVERS = 10;
 
 	private ContainerController agentContainer;
+	private ContainerController mainContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
 	private int driversCount = 200;
+	private ParkingFacilityAgent[] parkingFacilities;
+	private DriverAgent[] drivers;
 
 	public static void main(String[] args) {
 		ParkingSimulationLauncher model = new ParkingSimulationLauncher();
@@ -47,33 +50,82 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "ParkingSimulation";
 	}
 
 	@Override
 	protected void launchJADE() {
+		Runtime runtime = Runtime.instance();
+		Profile profile = new ProfileImpl();
+		mainContainer = runtime.createMainContainer(profile);
+		agentContainer = mainContainer;
 
-		/* 
-		Runtime rt = Runtime.instance();
-		Profile p1 = new ProfileImpl();
-		agentContainer = rt.createAgentContainer(p1);
+		launchAgents();
+	}
 
-		for (int i = 0; i < N_DRIVERS; i++) {
+	private void launchAgents() {
 
-			// TODO: Set Agents properties
-			DriverAgent a = new ExplorerDriverAgent(space, grid, i, i, i, i, i, i, i, i, i, i);
-			
-			
-			try {
-				agentContainer.acceptNewAgent("Driver " + a.getID(), a).start();
-			} catch (StaleProxyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		/* Create the agents */
+		try {
+			parkingFacilities = new ParkingFacilityAgent[] {
+					new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, (float) 1.43, (float) 9),
+					new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 65, 500, (float) 2.22,
+							(float) 13),
+					new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 44, 71, 351, (float) 2.22, (float) 13),
+					new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 47, 49, 407, (float) 2.73, (float) 25),
+					new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 58, 63, 335,
+							(float) 1.89, (float) 13),
+					new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 59, 55, 1082, (float) 2.73,
+							(float) 25),
+					new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 61, 38, 545, (float) 3.53, (float) 35),
+					new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 69, 65, (float) 1.89,
+							(float) 13),
+					new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 62, 350, (float) 2.73,
+							(float) 25),
+					new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 34, 449, (float) 2.22,
+							(float) 13),
+					new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 17, 297, (float) 2.22,
+							(float) 13),
+					new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 90, 51, 303, (float) 1.43,
+							(float) 25),
+					new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 88, 40, 610, (float) 1.43,
+							(float) 25) };
+
+			drivers = new DriverAgent[driversCount];
+
+			for (int i = 0; i < driversCount / 2; i++)
+				drivers[i] = new ExplorerDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119),
+						RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(),
+						RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
+
+			for (int i = driversCount / 2; i < driversCount; i++)
+				drivers[i] = new GuidedDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119),
+						RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(),
+						RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
+
+		} catch (SecurityException | IOException e) {
+			e.printStackTrace();
 		}
-		
-		 */
+
+		/* Add the agents to the JADE container */
+		try {
+			int i = 0;
+			for (ParkingFacilityAgent park : parkingFacilities) {
+				agentContainer.acceptNewAgent("park-" + (i++), park).start();
+				/*space.moveTo(park.getX(), park.getY());
+				grid.moveTo(park.getX(), park.getY());*/
+			}
+
+			i = 0;
+			for (DriverAgent driver : drivers) {
+				agentContainer.acceptNewAgent("driver-" + (i++), driver).start();
+				/*space.moveTo(driver.getStartX(), driver.getStartY());
+				grid.moveTo(driver.getStartX(), driver.getStartY());*/
+			}
+
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -81,63 +133,29 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		// http://repast.sourceforge.net/docs/RepastJavaGettingStarted.pdf
 
 		context.setId("ParkingSimulation");
-		
-		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);	
-		space = spaceFactory.createContinuousSpace("space", context , new RandomCartesianAdder<Object >(), new repast.simphony.space.continuous.StrictBorders(), 120, 80);
-		
+
+		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
+		space = spaceFactory.createContinuousSpace("space", context, new RandomCartesianAdder<Object>(),
+				new repast.simphony.space.continuous.StrictBorders(), 120, 80);
+
 		GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
 
-		// Set the boolean to true if more than one car can ocupy the same space
-		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
-				new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
+		// Set the boolean to true if more than one car can occupy the same
+		// space
+		grid = gridFactory.createGrid("grid", context,
+				new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
 
-		ParkingFacilityAgent[] parkingFacilities = {new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, (float) 1.43, (float) 9),
-				new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 65, 500, (float) 2.22, (float) 13),
-				new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 44, 71, 351, (float) 2.22, (float) 13),
-				new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 47, 49, 407, (float) 2.73, (float) 25),
-				new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 58, 63, 335, (float) 1.89, (float) 13),
-				new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 59, 55, 1082, (float) 2.73, (float) 25),
-				new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 61, 38, 545, (float) 3.53, (float) 35),
-				new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 69, 65, (float) 1.89, (float) 13),
-				new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 62, 350, (float) 2.73, (float) 25),
-				new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 34, 449, (float) 2.22, (float) 13),
-				new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 17, 297, (float) 2.22, (float) 13),
-				new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 90, 51, 303, (float) 1.43, (float) 25),
-				new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 88, 40, 610, (float) 1.43, (float) 25)
-			};
 		
-		
-		DriverAgent[] drivers = new DriverAgent[driversCount];
-		for(int i = 0; i < driversCount/2; i++) {
-			try {
-				drivers[i] = new ExplorerDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119), RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(), RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
-			} catch (SecurityException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		for(int i = driversCount/2; i < driversCount; i++) {
-			try {
-				drivers[i] = new GuidedDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119), RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(), RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
-			} catch (SecurityException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		/*
+		 * for (ParkingFacilityAgent obj : this.parkingFacilities) {
+		 * context.add(obj); space.moveTo(obj, obj.getX(), obj.getY());
+		 * grid.moveTo(obj, obj.getX(), obj.getY()); }
+		 * 
+		 * for (DriverAgent obj : this.drivers) { context.add(obj);
+		 * space.moveTo(obj, obj.getStartX(), obj.getStartY()); grid.moveTo(obj,
+		 * obj.getStartX(), obj.getStartY()); }
+		 */
 
-		for(ParkingFacilityAgent obj : parkingFacilities) {
-			context.add(obj);
-			space.moveTo(obj, obj.getX(), obj.getY());
-			grid.moveTo(obj, obj.getX(), obj.getY());
-		}
-		
-		
-		for(DriverAgent obj : drivers) {
-			context.add(obj);
-			space.moveTo(obj, obj.getStartX(), obj.getStartY());
-			grid.moveTo(obj, obj.getStartX(), obj.getStartY());
-		}
-		
 		return super.build(context);
 	}
 

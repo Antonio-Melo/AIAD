@@ -186,11 +186,15 @@ public abstract class DriverAgent extends Agent {
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
 	}
-
+	
+	public void setup(){
+		grid.moveTo(this, this.startX, this.startY);
+		space.moveTo(this, this.startX, this.startY);
+	}
+	
 	@ScheduledMethod(start = 1, interval = 1)
 	public void drive() {
 		// Only move if we are not already on target
-		
 		if(this.state == DriverState.PARKED) {
 			if(durationOfStay > 0)
 				durationOfStay--;
@@ -202,16 +206,14 @@ public abstract class DriverAgent extends Agent {
 		}else {
 			/*
 			 * Checks if driver is in the target or in the cell right next to the target. This verification
-			 * is necessary due to the fact that the convertion from space point to grid point, sometimes
-			 * won't translate to the correct point of the target but to the point next to it.
+			 * is necessary due to the fact that the conversion from space point to grid point sometimes
+			 * won't convert to the correct grid point of the target but to the point next to it.
 			 */
 			if (!((target.getX() == (grid.getLocation(this).getX() + 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
 					(target.getX() == (grid.getLocation(this).getX() - 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
 					(target.getX() == (grid.getLocation(this).getX()) && (target.getY() == (grid.getLocation(this).getY()))))
 					) {
-
 				moveTowards(target);
-
 			}
 			else { // reached target
 				if (!park()) {
@@ -222,8 +224,7 @@ public abstract class DriverAgent extends Agent {
 						Context<Object> context = ContextUtils.getContext(this);
 						context.remove(this);
 					}
-				}
-				
+				}	
 			}
 		}
 	}
