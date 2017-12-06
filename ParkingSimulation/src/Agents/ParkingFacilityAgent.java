@@ -137,6 +137,7 @@ public class ParkingFacilityAgent extends Agent {
 	
 	public float getFinalPriceForNumberOfHours(double hours, int dayOfTheWeek) {
 		float finalPrice = calculateFinalPrice(hours,dayOfTheWeek);
+		finalPrice = calculateOcupationDiscount(finalPrice);
 		
 		if(finalPrice > maxPrice) {
 			return maxPrice;
