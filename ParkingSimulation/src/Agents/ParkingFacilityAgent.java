@@ -55,15 +55,27 @@ public class ParkingFacilityAgent extends Agent {
 	private float maxPrice;
 	
 	/*
+	 * Indicates the deflation apllicated to the price of each hour
+	 */
+	private float deflationPrice;
+	
+	/*
 	 * Price Schema apllied for every day of the week
 	 * [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]  
 	 */
 	private List<Integer> priceSchema;
+	
 	/*
-	 * 
+	 * Indicates if a Parking Facility applies dynamic or static prices
 	 */
 	private boolean dynamic;
+	
+	/*
+	 * HashMap that stores the drivers inside the Parking Facility
+	 * <DriverId, HoursInsideThePark>
+	 */
 	private HashMap<Long,Integer> driversInsideThePark;
+	
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
 
@@ -71,6 +83,7 @@ public class ParkingFacilityAgent extends Agent {
 			int y, int capacity, float priceHour, float maxPrice, float minPrice, boolean dynamic) {
 		
 		this.numCars = 0;
+		this.deflationPrice = 1;
 		this.name = name;
 		this.operator = operator;
 		this.x = x;
@@ -123,7 +136,7 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public float getFinalPriceForNumberOfHours(double hours, int dayOfTheWeek) {
-		float finalPrice = (float) (priceSchema.get(dayOfTheWeek)*hours);
+		float finalPrice = calculateFinalPrice(hours,dayOfTheWeek);
 		
 		if(finalPrice > maxPrice) {
 			return maxPrice;
@@ -131,6 +144,31 @@ public class ParkingFacilityAgent extends Agent {
 			return minPrice;
 		}else {
 			return finalPrice;
+		}
+	}
+	
+	public float calculateFinalPrice(double hours, int dayOfTheWeek){
+		float finalPrice;
+		if(dynamic){
+			finalPrice = 0;
+			for(int i = 0; i < hours; i++){
+				finalPrice += priceSchema.get(dayOfTheWeek) * Math.pow(deflationPrice,i);
+			}
+		}else{
+			finalPrice = (priceSchema.get(dayOfTheWeek)*hours);
+		}
+		return finalPrice;
+	}
+	
+	public float calculateOcupacionDiscount(float price){
+		int perOcupation = numCars/capacity;
+		
+		if(perOcupation < 0.3){
+			return price*0.7;
+		}else if(perOcupation > 0.7){
+			return price*1.3;
+		}else {
+			return price;
 		}
 	}
 }
