@@ -112,15 +112,11 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			int i = 0;
 			for (ParkingFacilityAgent park : parkingFacilities) {
 				agentContainer.acceptNewAgent("park-" + (i++), park).start();
-				/*space.moveTo(park.getX(), park.getY());
-				grid.moveTo(park.getX(), park.getY());*/
 			}
 
 			i = 0;
 			for (DriverAgent driver : drivers) {
 				agentContainer.acceptNewAgent("driver-" + (i++), driver).start();
-				/*space.moveTo(driver.getStartX(), driver.getStartY());
-				grid.moveTo(driver.getStartX(), driver.getStartY());*/
 			}
 
 		} catch (StaleProxyException e) {
@@ -130,8 +126,6 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 
 	@Override
 	public Context build(Context<Object> context) {
-		// http://repast.sourceforge.net/docs/RepastJavaGettingStarted.pdf
-
 		context.setId("ParkingSimulation");
 
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
@@ -145,18 +139,6 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		grid = gridFactory.createGrid("grid", context,
 				new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
 
-		
-		/*
-		 * for (ParkingFacilityAgent obj : this.parkingFacilities) {
-		 * context.add(obj); space.moveTo(obj, obj.getX(), obj.getY());
-		 * grid.moveTo(obj, obj.getX(), obj.getY()); }
-		 * 
-		 * for (DriverAgent obj : this.drivers) { context.add(obj);
-		 * space.moveTo(obj, obj.getStartX(), obj.getStartY()); grid.moveTo(obj,
-		 * obj.getStartX(), obj.getStartY()); }
-		 */
-
 		return super.build(context);
 	}
-
 }
