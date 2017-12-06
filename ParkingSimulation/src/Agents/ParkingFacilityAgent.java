@@ -38,6 +38,11 @@ public class ParkingFacilityAgent extends Agent {
 		this.grid = grid;
 		this.space = space;
 	}
+	
+	public void setup(){
+		grid.moveTo(this, this.x, this.y);
+		space.moveTo(this, this.x, this.y);
+	}
 
 	//@Watch(watcheeClassName = "ParkingSimulation.Agents.DriverAgent", watcheeFieldNames = "moved", query = "within_moore 1", whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void run() {

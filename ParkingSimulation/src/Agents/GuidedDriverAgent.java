@@ -24,8 +24,11 @@ public class GuidedDriverAgent extends DriverAgent {
 
 		for (ParkingFacilityAgent park : parkingFacilities) {
 			this.parkList.add(park);
-		}
-
+		}	
+	}
+	
+	public void setup(){
+		super.setup();
 		this.setNextPark();
 	}
 

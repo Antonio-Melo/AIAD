@@ -14,6 +14,8 @@ import repast.simphony.util.ContextUtils;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.FileHandler;
@@ -22,13 +24,14 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
+import behaviors.DriverBehavior;
 import javassist.bytecode.stackmap.TypeData.ClassName;
 import sajas.core.Agent;
 
 public abstract class DriverAgent extends Agent {
 
 	protected final Logger logger = Logger.getLogger(ClassName.class.getName() + IDNumber);
-	
+
 	private static final long serialVersionUID = 1L;
 	private static int IDNumber = 0;
 
@@ -172,9 +175,9 @@ public abstract class DriverAgent extends Agent {
 		Random random = new Random();
 		this.state = DriverState.DRIVING;
 		this.parkingFacilities = parkingFacilities;
-		
+
 		logger.setUseParentHandlers(false);
-		FileHandler fh = new FileHandler("logs/drivers/Driver-"+ID+".txt");
+		FileHandler fh = new FileHandler("logs/drivers/Driver-" + ID + ".txt");
 		fh.setFormatter(new SimpleFormatter());
 		logger.addHandler(fh);
 		logger.info("Driver initialized with destination: " + destinationX + ", " + destinatioY);
@@ -187,43 +190,46 @@ public abstract class DriverAgent extends Agent {
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
 	}
 
-	@ScheduledMethod(start = 1, interval = 1)
+	public void setup() {
+		grid.moveTo(this, this.startX, this.startY);
+		space.moveTo(this, this.startX, this.startY);
+		addBehaviour(new DriverBehavior(this, 5));
+	}
+
+	public void parkTick() {
+		if (durationOfStay <= 0) {
+			targetPark.carLeavesPark();
+			this.doDelete();
+		} else {
+			durationOfStay--;
+		}
+	}
+
 	public void drive() {
-		// Only move if we are not already on target
-		
-		if(this.state == DriverState.PARKED) {
-			if(durationOfStay > 0)
-				durationOfStay--;
-			else {
-				Context<Object> context = ContextUtils.getContext(this);
-				context.remove(this);
-				targetPark.carLeavesPark();
-			}
-		}else {
-			/*
-			 * Checks if driver is in the target or in the cell right next to the target. This verification
-			 * is necessary due to the fact that the convertion from space point to grid point, sometimes
-			 * won't translate to the correct point of the target but to the point next to it.
-			 */
-			if (!((target.getX() == (grid.getLocation(this).getX() + 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
-					(target.getX() == (grid.getLocation(this).getX() - 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
-					(target.getX() == (grid.getLocation(this).getX()) && (target.getY() == (grid.getLocation(this).getY()))))
-					) {
 
-				moveTowards(target);
+		/*
+		 * Checks if driver is in the target or in the cell right next to the
+		 * target.
+		 * 
+		 * This verification is necessary due to the fact that the conversion
+		 * from space point to grid point sometimes won't convert to the correct
+		 * grid point of the target but to the point next to it.
+		 * 
+		 */
+		if (grid.getDistance(grid.getLocation(this), target) > 1)
+			moveTowards(target);
 
-			}
-			else { // reached target
-				if (!park()) {
-					/* Could not park, or target wasn't park */
-					if (!setNextPark()) {
-						/* No suitable park found */
-						achievedUtility = DriverAgent.WORST_UTILITY;
-						Context<Object> context = ContextUtils.getContext(this);
-						context.remove(this);
-					}
+		else { // reached target
+			
+			/* Small frontend fix for the cases where the above happens */
+			grid.moveTo(this, target.getX(), target.getY()); 
+			if (!park()) {
+				/* Could not park, or target wasn't park */
+				if (!setNextPark()) {
+					/* No suitable park found */
+					achievedUtility = DriverAgent.WORST_UTILITY;
+					this.doDelete();
 				}
-				
 			}
 		}
 	}
@@ -329,5 +335,9 @@ public abstract class DriverAgent extends Agent {
 
 	public int getDay() {
 		return day;
+	}
+
+	public DriverState getState() {
+		return state;
 	}
 }

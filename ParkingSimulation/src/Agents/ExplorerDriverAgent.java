@@ -20,7 +20,10 @@ public class ExplorerDriverAgent extends DriverAgent {
 		super(space, grid, startX, startY, destinationX, destinatioY, arrival, maxPricePerHour, durationOfStay,
 				maxWalkingDistance, initialTime, day, parkingFacilities);
 		this.parkList = new ArrayList<>(Arrays.asList(parkingFacilities));
-
+	}
+	
+	public void setup(){
+		super.setup();
 		this.target = new GridPoint(this.getDestinationX(), this.getDestinationY());
 	}
 
@@ -33,7 +36,6 @@ public class ExplorerDriverAgent extends DriverAgent {
 			return null;
 		}
 			
-
 		int closestParkIndex = 0;
 		GridPoint myPoint = grid.getLocation(this);
 		GridPoint parkPoint = grid.getLocation(parkList.get(0));
