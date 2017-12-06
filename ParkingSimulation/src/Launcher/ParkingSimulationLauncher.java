@@ -91,7 +91,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
 				new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
 
-		ParkingFacilityAgent[] parkingFacilities = {new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, (float) 1.43, (float) 9),
+		/*ParkingFacilityAgent[] parkingFacilities = {new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, (float) 1.43, (float) 9),
 				new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 65, 500, (float) 2.22, (float) 13),
 				new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 44, 71, 351, (float) 2.22, (float) 13),
 				new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 47, 49, 407, (float) 2.73, (float) 25),
@@ -104,7 +104,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 				new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 17, 297, (float) 2.22, (float) 13),
 				new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 90, 51, 303, (float) 1.43, (float) 25),
 				new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 88, 40, 610, (float) 1.43, (float) 25)
-			};
+			};*/
 		
 		
 		DriverAgent[] drivers = new DriverAgent[driversCount];
