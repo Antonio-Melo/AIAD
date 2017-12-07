@@ -1,30 +1,16 @@
 package Agents;
 
-import repast.simphony.context.Context;
-import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.query.space.grid.GridCell;
-import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.SpatialMath;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
-import repast.simphony.util.ContextUtils;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.List;
 import java.util.Random;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import java.util.logging.StreamHandler;
-
 import behaviors.DriverBehavior;
 import javassist.bytecode.stackmap.TypeData.ClassName;
 import sajas.core.Agent;
@@ -154,7 +140,7 @@ public abstract class DriverAgent extends Agent {
 	protected GridPoint target;
 	private ParkingFacilityAgent[] parkingFacilities;
 	protected ParkingFacilityAgent targetPark;
-
+	
 	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
 
 		IDNumber++;
@@ -199,12 +185,17 @@ public abstract class DriverAgent extends Agent {
 		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
+
 	}
 
 	public void setup() {
+		
+	}
+	
+	public void launch() {
 		grid.moveTo(this, this.startX, this.startY);
 		space.moveTo(this, this.startX, this.startY);
-		addBehaviour(new DriverBehavior(this, 5));
+		addBehaviour(new DriverBehavior(this, 1));
 	}
 
 	public void parkTick() {

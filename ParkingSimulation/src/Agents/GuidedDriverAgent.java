@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.PriorityQueue;
 
 import Utilities.ParkingFacilityComparator;
+import repast.simphony.engine.schedule.Schedule;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;

@@ -17,6 +17,10 @@ import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.Schedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
@@ -43,7 +47,8 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private int driversCount = 200;
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
-
+	protected ISchedule schedule;
+	
 	public static void main(String[] args) {
 		ParkingSimulationLauncher model = new ParkingSimulationLauncher();
 	}
@@ -59,12 +64,12 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		Profile profile = new ProfileImpl();
 		mainContainer = runtime.createMainContainer(profile);
 		agentContainer = mainContainer;
-
+		schedule = RunEnvironment.getInstance().getCurrentSchedule();
 		launchAgents();
 	}
 
 	private void launchAgents() {
-
+		
 		/* Create the agents */
 		try {
 			parkingFacilities = new ParkingFacilityAgent[] {
@@ -113,12 +118,16 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 
 			i = 0;
 			for (DriverAgent driver : drivers) {
+				ScheduleParameters  params = ScheduleParameters.createOneTime(10000);
+				schedule.schedule(params , driver , "launch");
 				agentContainer.acceptNewAgent("driver-" + (i++), driver).start();
 			}
 
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 
 	@Override
@@ -134,7 +143,6 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		// Set the boolean to true if more than one car can occupy the same
 		// space
 		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
-
 		return super.build(context);
 	}
 }
