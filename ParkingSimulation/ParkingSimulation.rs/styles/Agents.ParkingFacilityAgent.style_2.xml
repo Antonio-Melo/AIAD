@@ -4,10 +4,10 @@
   <sizeMax>15.0</sizeMax>
   <sizeMin>1.0</sizeMin>
   <sizeScale>1.0</sizeScale>
-  <sizeMethodName>getCapacity</sizeMethodName>
-  <sizeMaxMethodName>getCapacity</sizeMaxMethodName>
+  <sizeMethodName>getAvailableSpace</sizeMethodName>
+  <sizeMaxMethodName>getAvailableSpace</sizeMaxMethodName>
   <label></label>
-  <labelMethod>getCapacity</labelMethod>
+  <labelMethod>getName</labelMethod>
   <labelPosition>bottom</labelPosition>
   <labelPrecision>3</labelPrecision>
   <labelOffset>5.0</labelOffset>

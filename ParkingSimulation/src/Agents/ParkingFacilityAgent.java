@@ -52,6 +52,10 @@ public class ParkingFacilityAgent extends Agent {
 	public String getParkName() {
 		return this.name;
 	}
+	
+	public int getAvailableSpace() {
+		return capacity-numCars;
+	}
 
 	public String getOperator() {
 		return operator;

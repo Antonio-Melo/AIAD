@@ -92,16 +92,13 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 							(float) 25) };
 
 			drivers = new DriverAgent[driversCount];
-
-			for (int i = 0; i < driversCount / 2; i++)
-				drivers[i] = new ExplorerDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119),
-						RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(),
-						RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
-
+			
+			for (int i = 0; i < driversCount / 2; i++) {		
+				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities);
+			}
+		
 			for (int i = driversCount / 2; i < driversCount; i++)
-				drivers[i] = new GuidedDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119),
-						RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(),
-						RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
+				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities);
 
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
@@ -136,8 +133,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 
 		// Set the boolean to true if more than one car can occupy the same
 		// space
-		grid = gridFactory.createGrid("grid", context,
-				new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
+		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
 
 		return super.build(context);
 	}

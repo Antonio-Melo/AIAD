@@ -4,6 +4,7 @@ import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.query.space.grid.GridCell;
 import repast.simphony.query.space.grid.GridCellNgh;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.SpatialMath;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
@@ -105,7 +106,7 @@ public abstract class DriverAgent extends Agent {
 	/*
 	 * Time of arrival at destination
 	 */
-	private int arrival;
+	private double arrival;
 
 	/*
 	 * Maximum price the driver is willing to pay per hour
@@ -121,8 +122,8 @@ public abstract class DriverAgent extends Agent {
 	/*
 	 * Duration (in hours) of the stay in the park
 	 */
-	private int durationOfStay;
-	private int initialTime;
+	private double durationOfStay;
+	private double initialTime;
 	private int day;
 
 	/*
@@ -154,33 +155,43 @@ public abstract class DriverAgent extends Agent {
 	private ParkingFacilityAgent[] parkingFacilities;
 	protected ParkingFacilityAgent targetPark;
 
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
-			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
-			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
+	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
-		this.startX = startX;
-		this.startY = startY;
-		this.destinationX = destinationX;
-		this.destinationY = destinatioY;
-		this.arrival = arrival;
-		this.maxPricePerHour = maxPricePerHour;
-		this.durationOfStay = durationOfStay;
-		this.maxWalkingDistance = maxWalkingDistance;
-		this.initialTime = initialTime;
-		this.day = day;
+		
+		this.startX = RandomHelper.nextIntFromTo(0, 119);
+		this.startY = RandomHelper.nextIntFromTo(0, 79);
+		this.destinationX = RandomHelper.createNormal(60, 15).nextInt();
+		this.destinationY = RandomHelper.createNormal(40, 10).nextInt();
+		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
+		this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5);				
+		this.day = RandomHelper.nextIntFromTo(0, 6);
+		
+		if(this.day < 5)
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 60;
+		else {
+			double arrival = 25;
+			while((arrival > 24)) {
+				arrival = RandomHelper.createChiSquare(10).nextDouble();
+			}
+			this.arrival = arrival * 60;
+		}
+		
+		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
+		this.initialTime = arrival - 90;
 		this.grid = grid;
 		this.space = space;
-		Random random = new Random();
 		this.state = DriverState.DRIVING;
 		this.parkingFacilities = parkingFacilities;
+		
+		Random random = new Random();
 
 		logger.setUseParentHandlers(false);
 		FileHandler fh = new FileHandler("logs/drivers/Driver-" + ID + ".txt");
 		fh.setFormatter(new SimpleFormatter());
 		logger.addHandler(fh);
-		logger.info("Driver initialized with destination: " + destinationX + ", " + destinatioY);
+		logger.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
 
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
@@ -313,7 +324,7 @@ public abstract class DriverAgent extends Agent {
 		return destinationY;
 	}
 
-	public int getArrival() {
+	public double getArrival() {
 		return arrival;
 	}
 
@@ -321,7 +332,7 @@ public abstract class DriverAgent extends Agent {
 		return maxPricePerHour;
 	}
 
-	public int getDurationOfStay() {
+	public double getDurationOfStay() {
 		return durationOfStay;
 	}
 
@@ -329,7 +340,7 @@ public abstract class DriverAgent extends Agent {
 		return maxWalkingDistance;
 	}
 
-	public int getInitialTime() {
+	public double getInitialTime() {
 		return initialTime;
 	}
 

@@ -13,12 +13,9 @@ public class GuidedDriverAgent extends DriverAgent {
 
 	private final PriorityQueue<ParkingFacilityAgent> parkList;
 
-	public GuidedDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
-			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
-			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities)
+	public GuidedDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities)
 			throws SecurityException, IOException {
-		super(space, grid, startX, startY, destinationX, destinatioY, arrival, maxPricePerHour, durationOfStay,
-				maxWalkingDistance, initialTime, day, parkingFacilities);
+		super(space, grid, parkingFacilities);
 
 		this.parkList = new PriorityQueue<>(new ParkingFacilityComparator(this));
 
