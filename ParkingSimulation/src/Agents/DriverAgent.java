@@ -1,5 +1,7 @@
 package Agents;
 
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.SpatialMath;
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -140,8 +142,9 @@ public abstract class DriverAgent extends Agent {
 	protected GridPoint target;
 	private ParkingFacilityAgent[] parkingFacilities;
 	protected ParkingFacilityAgent targetPark;
+	protected ISchedule schedule;
 	
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
+	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
@@ -170,7 +173,7 @@ public abstract class DriverAgent extends Agent {
 		this.space = space;
 		this.state = DriverState.DRIVING;
 		this.parkingFacilities = parkingFacilities;
-		
+		this.schedule = schedule;
 		Random random = new Random();
 
 		logger.setUseParentHandlers(false);
@@ -189,7 +192,8 @@ public abstract class DriverAgent extends Agent {
 	}
 
 	public void setup() {
-		
+		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime*100);
+		schedule.schedule(params , this , "launch");
 	}
 	
 	public void launch() {

@@ -99,11 +99,11 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			drivers = new DriverAgent[driversCount];
 			
 			for (int i = 0; i < driversCount / 2; i++) {		
-				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities);
+				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule);
 			}
 		
 			for (int i = driversCount / 2; i < driversCount; i++)
-				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities);
+				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule);
 
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
@@ -115,11 +115,8 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			for (ParkingFacilityAgent park : parkingFacilities) {
 				agentContainer.acceptNewAgent("park-" + (i++), park).start();
 			}
-
 			i = 0;
 			for (DriverAgent driver : drivers) {
-				ScheduleParameters  params = ScheduleParameters.createOneTime(10000);
-				schedule.schedule(params , driver , "launch");
 				agentContainer.acceptNewAgent("driver-" + (i++), driver).start();
 			}
 
