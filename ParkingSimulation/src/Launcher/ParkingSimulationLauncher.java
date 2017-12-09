@@ -44,7 +44,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private ContainerController mainContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private int driversCount = 5000;
+	private int driversCount = 500;
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
 	protected ISchedule schedule;
@@ -101,7 +101,6 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			for (int i = 0; i < driversCount / 2; i++) {		
 				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule);
 			}
-		
 			for (int i = driversCount / 2; i < driversCount; i++)
 				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule);
 

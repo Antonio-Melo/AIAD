@@ -156,7 +156,7 @@ public abstract class DriverAgent extends Agent {
 		this.destinationX = RandomHelper.createNormal(60, 15).nextInt();
 		this.destinationY = RandomHelper.createNormal(40, 10).nextInt();
 		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);			
-		this.day = RandomHelper.nextIntFromTo(0, 6);
+		this.day = RandomHelper.nextIntFromTo(1, 7);;
 		
 		/*
 		 * 0.0055m/ms -> 20km/h
@@ -167,54 +167,28 @@ public abstract class DriverAgent extends Agent {
 		 * 1h = 900 ticks
 		 * 1min = 15 ticks
 		 * */
-		double arrival = 25*900;
-		switch(this.day) {
-			case 0:
-				this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-				this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900;	
-				break;
-			case 1:
-				this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-				this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * 2;	
-				break;
-			case 2:
-				this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-				this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * 3;	
-				break;
-			case 3:
-				this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900* 4;	
-				this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900;	
-				break;
-			case 4:
-				this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900 * 5;	
-				this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900;	
-				break;
-			case 5:
-				this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900 * 6;
-				while((arrival > 24*900)) {
-					arrival = RandomHelper.createChiSquare(10).nextDouble() * 900;
-				}
-				this.arrival = arrival;
-				break;
-			case 6:
-				this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900 * 7;	
-				while((arrival > 24*900)) {
-					
-					arrival = RandomHelper.createChiSquare(10).nextDouble() * 900;
-				}
-				this.arrival = arrival;
-				break;
-			default:
-				System.out.println("Invalid day");
-				break;
-		}
-				
+		
+		
+		if(day < 6) {
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * day;	
+		}else {
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;	
+			arrival = 25;
+			while((arrival > 24)) {
+				arrival = RandomHelper.createChiSquare(10).nextDouble();
+			}
+			this.arrival = arrival * 900 * day;
+		}	
+
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
 		
-		if(arrival - 1350 < 0)
+
+		if(this.arrival - 1350 < 0)
 			initialTime = 0;
 		else
 			initialTime = arrival - 1350;
+		
 		
 		this.grid = grid;
 		this.space = space;
