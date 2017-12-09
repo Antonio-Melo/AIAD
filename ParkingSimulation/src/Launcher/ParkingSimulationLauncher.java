@@ -40,8 +40,8 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
 	protected ISchedule schedule;
-	private int weekDay = 1;
-	private int weekCount = 1;
+	private int weekDay = 0;
+	private int weekCount = 0;
 	private String experiment;
 	
 	public static void main(String[] args) {
@@ -200,7 +200,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	
 	public void launchDrivers() throws SecurityException, IOException {
 
-		if(weekDay < 6) {
+		if(weekDay < 5) {
 			drivers = new DriverAgent[totalDriversPerWeekDay];
 			for (int i = 0; i < totalDriversPerWeekDay / 2; i++) {		
 				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
@@ -230,8 +230,8 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		weekDay++;
 		weekCount++;
 		
-		if(weekDay > 7)
-			weekDay = 1;
+		if(weekDay > 6)
+			weekDay = 0;
 	}
 
 	@Override

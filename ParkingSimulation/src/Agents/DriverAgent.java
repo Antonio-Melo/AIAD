@@ -171,14 +171,14 @@ public abstract class DriverAgent extends Agent {
 		
 		if(day < 6) {
 			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * weekDay * weekCount;	
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * (weekDay+1) * weekCount;	
 		}else {
 			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;	
 			arrival = 25;
 			while((arrival > 24)) {
 				arrival = RandomHelper.createChiSquare(10).nextDouble();
 			}
-			this.arrival = arrival * 900 * weekDay * weekCount;
+			this.arrival = arrival * 900 * (weekDay+1) * weekCount;
 		}	
 
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
