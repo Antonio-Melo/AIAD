@@ -15,24 +15,6 @@ public class ParkingFacilityAgent extends Agent {
 	private static final long serialVersionUID = 1L;
 	
 	/*
-	 * Enum representing the possible parameter that is updated each week
-	 */
-	public enum UpdateParameters{
-		PRICE_PER_HOUR,
-		MIN_PRICE,
-		MAX_PRICE,
-		DEFLATION,
-		CAPACITY_DISCOUNT
-	};
-	
-	private UpdateParameters parameter;
-	
-	/*
-	 * Consecutive number of updates of one parameter
-	 */
-	private int consecutiveUpdates;
-	
-	/*
 	 * Park Facility Name
 	 */
 	private String name;
@@ -65,17 +47,17 @@ public class ParkingFacilityAgent extends Agent {
 	/*
 	 * Minimum price that a driver pays when parking  
 	 */
-	private float minPrice;
+	private double minPrice;
 	
 	/*
 	 * Maximum price that a driver pays when parking  
 	 */
-	private float maxPrice;
+	private double maxPrice;
 	
 	/*
 	 * Indicates the deflation apllicated to the price of each hour
 	 */
-	private float deflationPrice;
+	private double deflationPrice;
 	
 	/*
 	 * Week number
@@ -86,7 +68,7 @@ public class ParkingFacilityAgent extends Agent {
 	 * Price Schema apllied for every day of the week
 	 * [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]  
 	 */
-	private List<Float> priceSchema;
+	private List<Double> priceSchema;
 	
 	/*
 	 * Indicates if a Parking Facility applies dynamic or static prices
@@ -103,18 +85,46 @@ public class ParkingFacilityAgent extends Agent {
 	 * HashMap that stores the week revenue
 	 * <Week,Revenue>
 	 */
-	private HashMap<Integer,Float> weeklyRevenue; 
+	private HashMap<Integer,Double> weeklyRevenue;
+	
+	private double learningRate;
+	/*
+	 * Enum representing the possible parameter that is updated each week
+	 */
+	public enum UpdateParameters{
+		PRICE_PER_HOUR,
+		MIN_PRICE,
+		MAX_PRICE,
+		DEFLATION,
+		CAPACITY_DISCOUNT
+	};
+	
+	private UpdateParameters parameter;
+	
+	/*
+	 * Consecutive number of updates of one parameter
+	 */
+	private int consecutiveUpdates;
+	
+	
+	/*
+	 * Last update decision (true-up or false-down)
+	 */
+	private boolean lastUpdateDecision;
+	
+	/*
+	 * 
+	 */
+	private double capacityDiscount;
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
 
-	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, List<Float> priceSchema, String name, String operator, int x,
-			int y, int capacity, float priceHour, float maxPrice, float minPrice, boolean dynamic) {
+	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, List<Double> priceSchema, String name, String operator, int x,
+			int y, int capacity, double priceHour, double maxPrice, double minPrice, boolean dynamic, boolean lastUpdateDecision,double learningRate, double capacityDiscount) {
 		
 		this.numCars = 0;
 		this.deflationPrice = 1;
 		this.currentWeek = 0;
-		this.consecutiveUpdates = 0;
-		this.parameter = UpdateParameters.PRICE_PER_HOUR;
 		this.name = name;
 		this.operator = operator;
 		this.x = x;
@@ -125,8 +135,12 @@ public class ParkingFacilityAgent extends Agent {
 		this.dynamic = dynamic;
 		this.driversInsideThePark = new HashMap<Integer,Integer>();
 		this.priceSchema = priceSchema;
-		this.weeklyRevenue = new HashMap<Integer,Float>();
-		this.weeklyRevenue.put(0, (float)0);
+		this.weeklyRevenue = new HashMap<Integer,Double>();
+		this.learningRate = 0.3;
+		this.consecutiveUpdates = 0;
+		this.parameter = UpdateParameters.PRICE_PER_HOUR;
+		this.lastUpdateDecision = true;
+		this.capacityDiscount = 0.3;
 		this.grid = grid;
 		this.space = space;
 	}
@@ -176,7 +190,11 @@ public class ParkingFacilityAgent extends Agent {
 		consecutiveUpdates = 0;
 	}
 	
-	public void parkCar(DriverAgent car, int hours, float price) {
+	public void nextWeek() {
+		currentWeek +=1;
+	}
+	
+	public void parkCar(DriverAgent car, int hours, double price) {
 		driversInsideThePark.put(car.getID(), hours);
 		incNumCar();
 		weeklyRevenue.replace(currentWeek, weeklyRevenue.get(currentWeek) + price);
@@ -187,8 +205,8 @@ public class ParkingFacilityAgent extends Agent {
 		decNumCar();
 	}
 	
-	public float getFinalPriceForNumberOfHours(int hours, int dayOfTheWeek) {
-		float finalPrice = calculateFinalPrice(hours,dayOfTheWeek);
+	public double getFinalPriceForNumberOfHours(double hours, int dayOfTheWeek) {
+		double finalPrice = calculateFinalPrice(hours,dayOfTheWeek);
 		finalPrice = calculateOcupacionDiscount(finalPrice);
 		
 		if(finalPrice > maxPrice) {
@@ -200,26 +218,32 @@ public class ParkingFacilityAgent extends Agent {
 		}
 	}
 	
-	public float calculateFinalPrice(int hours, int dayOfTheWeek){
-		float finalPrice;
+	public double calculateFinalPrice(double hours, int dayOfTheWeek){
+		double finalPrice;
+		double decimalPart = hours % 1;
+		
 		if(dynamic){
 			finalPrice = 0;
-			for(int i = 0; i < hours; i++){
+			double hoursC = (decimalPart == 0) ? hours: hours - decimalPart; 
+			int i;
+			for(i = 0; i < hoursC; i++){
 				finalPrice += priceSchema.get(dayOfTheWeek) * Math.pow(deflationPrice,i);
 			}
+			finalPrice += (decimalPart == 0) ? 0: priceSchema.get(dayOfTheWeek) * Math.pow(deflationPrice,i)* decimalPart;
+			
 		}else{
-			finalPrice = (float)(priceSchema.get(dayOfTheWeek)*hours);
+			finalPrice = priceSchema.get(dayOfTheWeek)*hours;
 		}
 		return finalPrice;
 	}
 	
-	public float calculateOcupacionDiscount(float price){
+	public double calculateOcupacionDiscount(double price){
 		double perOcupation = numCars/capacity;
 		
 		if(perOcupation < 0.3){
-			return (float)(price*0.7);
+			return price*0.7;
 		}else if(perOcupation > 0.7){
-			return (float)(price*1.3);
+			return price*1.3;
 		}else {
 			return price;
 		}
@@ -280,21 +304,38 @@ public class ParkingFacilityAgent extends Agent {
 	
 	public void updatePricePerHour() {
 		
+		
 	}
 	
 	public void updateMinPrice() {
-		
+		minPrice = updateChosenParameter(minPrice);
 	}
 	
 	public void updateMaxPrice() {
-		
+		maxPrice = updateChosenParameter(maxPrice);
 	}
 	
 	public void updateDeflation() {
-		
+		deflationPrice = updateChosenParameter(deflationPrice);
 	}
 	
 	public void updateCapacityDiscount() {
-		
+		capacityDiscount = updateChosenParameter(capacityDiscount);
+	}
+	
+	public double updateChosenParameter(double parameter) {
+		double newParameter;
+		if(lastUpdateDecision) {
+			newParameter = parameter + learningRate*parameter*(calculateRevenuePercentil()-1);
+		}else {
+			newParameter = parameter - learningRate*parameter*(calculateRevenuePercentil()-1);
+		}
+		lastUpdateDecision = (newParameter-parameter > 0) ? true: false;
+		return newParameter;
+	}
+	
+	public double calculateRevenuePercentil() {
+		if(currentWeek ==0) return 0;
+		else return ((weeklyRevenue.get(currentWeek)-weeklyRevenue.get(currentWeek-1))/weeklyRevenue.get(currentWeek-1));
 	}
 }
