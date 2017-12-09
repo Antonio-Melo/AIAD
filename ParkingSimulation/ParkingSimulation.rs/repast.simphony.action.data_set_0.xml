@@ -1,31 +1,36 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>Weekly Revenue</name>
+  <name>Drivers Count</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
-    <interval>151200.0</interval>
+    <interval>1.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1921536961</hashCode>
+    <hashCode>-1347753791</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
-  <methodDataSources class="linked-hash-map">
+  <methodDataSources class="linked-hash-map"/>
+  <countSources class="linked-hash-map">
     <entry>
-      <string>Park</string>
-      <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Park</id>
-        <className>Agents.ParkingFacilityAgent</className>
-        <methodName>currentRevenue</methodName>
-        <aggType>SUM</aggType>
-      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+      <string>Explorer</string>
+      <repast.simphony.data2.engine.CountSourceDefinition>
+        <typeName>Agents.ExplorerDriverAgent</typeName>
+        <id>Explorer</id>
+      </repast.simphony.data2.engine.CountSourceDefinition>
     </entry>
-  </methodDataSources>
-  <countSources class="linked-hash-map"/>
+    <entry>
+      <string>Driver</string>
+      <repast.simphony.data2.engine.CountSourceDefinition>
+        <typeName>Agents.GuidedDriverAgent</typeName>
+        <id>Driver</id>
+      </repast.simphony.data2.engine.CountSourceDefinition>
+    </entry>
+  </countSources>
   <customNADataSources class="linked-hash-map"/>
   <customAggDataSources class="linked-hash-map"/>
 </repast.simphony.data2.engine.DataSetDescriptor>

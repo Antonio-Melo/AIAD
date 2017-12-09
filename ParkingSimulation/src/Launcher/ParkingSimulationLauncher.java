@@ -39,8 +39,8 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private ContainerController mainContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private int totalDriversPerWeekDay = 100;
-	private int totalDriversPerWeekendDay = 80;
+	private int totalDriversPerWeekDay = 1000;
+	private int totalDriversPerWeekendDay = 800;
 	private int driversCount = 0;
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
@@ -213,6 +213,10 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 				initialTime = RandomHelper.createChiSquare(10).nextDouble();
 			}
 		}
+		
+		if(weekDay == 7) {
+			weekDay = 0;
+		}
 		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * 900 +  (21600 * weekDay) + (21600 * 7 * weekCount));
 		schedule.schedule(params , this , "launchExplorerDriver", weekDay, weekCount, initialTime);	
 	}
@@ -227,7 +231,9 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 				initialTime = RandomHelper.createChiSquare(10).nextDouble();
 			}
 		}
-		
+		if(weekDay == 7) {
+			weekDay = 0;
+		}
 		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * 900 +  (21600 * weekDay) + (21600 * 7 * weekCount));
 		schedule.schedule(params , this , "launchGuidedDriver", weekDay, weekCount, initialTime);	
 	}
@@ -245,7 +251,13 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	}
 	
 	public void launchDrivers() throws SecurityException, IOException {
-
+		if(weekDay == 7) {
+			weekCount++;
+			weekDay = 0;
+			for(ParkingFacilityAgent park: parkingFacilities) {
+				park.updateParameter();
+			}
+		}
 		if(weekDay < 5) {
 			for (int i = 0; i < totalDriversPerWeekDay / 2; i++) {		
 				scheduleLaunchExplorerDriver(weekDay, weekCount);
@@ -260,18 +272,9 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			for (int i = totalDriversPerWeekendDay / 2; i < totalDriversPerWeekendDay; i++) {
 				scheduleLaunchGuidedDriver(weekDay, weekCount);
 			}
-		}		
-
-		weekDay++;
-		
-		if(weekDay == 7) {
-			weekCount++;
-			weekDay = 0;
-			for(ParkingFacilityAgent park: parkingFacilities) {
-				park.updateParameter();
-			}
 		}
-			
+		
+		weekDay++;			
 	}
 
 	@Override
