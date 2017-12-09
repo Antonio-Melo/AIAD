@@ -1,39 +1,31 @@
 package Launcher;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import Agents.DriverAgent;
 import Agents.ExplorerDriverAgent;
 import Agents.GuidedDriverAgent;
 import Agents.ParkingFacilityAgent;
-import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
-import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
-import repast.simphony.engine.schedule.Schedule;
 import repast.simphony.engine.schedule.ScheduleParameters;
-import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
-import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.continuous.RandomCartesianAdder;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.SimpleGridAdder;
 import repast.simphony.space.grid.StrictBorders;
-import sajas.core.Agent;
 import sajas.core.Runtime;
 import sajas.sim.repasts.RepastSLauncher;
 import sajas.wrapper.ContainerController;
-import repast.simphony.space.grid.WrapAroundBorders;
 
 public class ParkingSimulationLauncher extends RepastSLauncher {
 
@@ -49,6 +41,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	protected ISchedule schedule;
 	private int weekDay = 1;
 	private int weekCount = 1;
+	private String experiment;
 	
 	public static void main(String[] args) {
 		ParkingSimulationLauncher model = new ParkingSimulationLauncher();
@@ -148,6 +141,11 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	@Override
 	public Context build(Context<Object> context) {
 		context.setId("ParkingSimulation");
+		
+		repast.simphony.parameter.Parameters parameters = RunEnvironment.getInstance().getParameters();
+		this.totalDriversPerWeekDay = parameters.getInteger("driver_count_weekdays");
+		this.totalDriversPerWeekendDay= parameters.getInteger("driver_count_weekends");
+		this.experiment = parameters.getString("experiment");
 
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
 		space = spaceFactory.createContinuousSpace("space", context, new RandomCartesianAdder<Object>(),
