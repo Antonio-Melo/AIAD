@@ -251,9 +251,9 @@ public class ParkingFacilityAgent extends Agent {
 		double perOcupation = numCars/capacity;
 		
 		if(perOcupation < 0.3){
-			return price*0.7;
+			return price*(1-capacityDiscount);
 		}else if(perOcupation > 0.7){
-			return price*1.3;
+			return price*(1+capacityDiscount);
 		}else {
 			return price;
 		}
