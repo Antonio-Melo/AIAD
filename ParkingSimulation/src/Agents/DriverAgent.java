@@ -162,21 +162,26 @@ public abstract class DriverAgent extends Agent {
 		 * moves one house, which is equivalent to 22m. There for every tick is
 		 * equivalent to 4000ms 1tick = 4000ms = 4s 1 dia = 86400s = 21600 ticks
 		 * 1h = 900 ticks 1min = 15 ticks
-		 * 
 		 */
-
-		if (day < 6) {
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;
-			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * (day + 1) * (weekCount + 1);
-		} else {
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;
+		
+		  
+		if(day < 6) {
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble();	
+		}else {
 			arrival = 25;
 			while ((arrival > 24)) {
 				arrival = RandomHelper.createChiSquare(10).nextDouble();
 			}
-			this.arrival = arrival * 900 * (day + 1) * (weekCount + 1);
-		}
+		}	
 
+		if(this.arrival > 10)
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(0, 2) * 900;	
+		else
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
+			
+			
+		
+		this.arrival = arrival * 900 * (day+1) * (weekCount+1);
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
 
 		if (this.arrival - 1350 < 0)
