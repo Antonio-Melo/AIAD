@@ -1,12 +1,11 @@
 package Agents;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.space.continuous.ContinuousSpace;
-import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 
@@ -14,13 +13,13 @@ public class ExplorerDriverAgent extends DriverAgent {
 
 	private final ArrayList<ParkingFacilityAgent> parkList;
 
-	public ExplorerDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY,
-			int destinationX, int destinatioY, int arrival, float maxPricePerHour, int durationOfStay,
-			int maxWalkingDistance, int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
-		super(space, grid, startX, startY, destinationX, destinatioY, arrival, maxPricePerHour, durationOfStay,
-				maxWalkingDistance, initialTime, day, parkingFacilities);
+	public ExplorerDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount) throws SecurityException, IOException {
+		super(space, grid, parkingFacilities, schedule, weekDay, weekCount);
 		this.parkList = new ArrayList<>(Arrays.asList(parkingFacilities));
-
+	}
+	
+	public void setup(){
+		super.setup();
 		this.target = new GridPoint(this.getDestinationX(), this.getDestinationY());
 	}
 
@@ -33,7 +32,6 @@ public class ExplorerDriverAgent extends DriverAgent {
 			return null;
 		}
 			
-
 		int closestParkIndex = 0;
 		GridPoint myPoint = grid.getLocation(this);
 		GridPoint parkPoint = grid.getLocation(parkList.get(0));

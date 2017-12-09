@@ -80,7 +80,7 @@ public class ParkingFacilityAgent extends Agent {
 	 * HashMap that stores the drivers inside the Parking Facility
 	 * <DriverId, HoursInsideThePark>
 	 */
-	private HashMap<Integer,Integer> driversInsideThePark;
+	private HashMap<Integer,Double> driversInsideThePark;
 	
 	/*
 	 * HashMap that stores the week revenue
@@ -134,7 +134,7 @@ public class ParkingFacilityAgent extends Agent {
 		this.maxPrice = maxPrice;
 		this.capacity = capacity;
 		this.dynamic = dynamic;
-		this.driversInsideThePark = new HashMap<Integer,Integer>();
+		this.driversInsideThePark = new HashMap<Integer,Double>();
 		this.priceSchema = priceSchema;
 		this.weeklyRevenue = new HashMap<Integer,Double>();
 		this.learningRate = 0.3;
@@ -145,6 +145,11 @@ public class ParkingFacilityAgent extends Agent {
 		this.grid = grid;
 		this.space = space;
 	}
+	
+	public void setup(){
+		grid.moveTo(this, this.x, this.y);
+		space.moveTo(this, this.x, this.y);
+	}
 
 	//@Watch(watcheeClassName = "ParkingSimulation.Agents.DriverAgent", watcheeFieldNames = "moved", query = "within_moore 1", whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void run() {
@@ -153,6 +158,10 @@ public class ParkingFacilityAgent extends Agent {
 
 	public String getParkName() {
 		return this.name;
+	}
+	
+	public int getAvailableSpace() {
+		return (capacity-numCars);
 	}
 
 	public String getOperator() {
@@ -172,7 +181,7 @@ public class ParkingFacilityAgent extends Agent {
 	}
 
 	public boolean isFull() {
-		return numCars == capacity;
+		return numCars >= capacity;
 	}
 
 	public void incNumCar() {
@@ -195,10 +204,10 @@ public class ParkingFacilityAgent extends Agent {
 		currentWeek +=1;
 	}
 	
-	public void parkCar(DriverAgent car, int hours, double price) {
+	public void parkCar(DriverAgent car, double hours, int day) {
 		driversInsideThePark.put(car.getID(), hours);
 		incNumCar();
-		weeklyRevenue.replace(currentWeek, weeklyRevenue.get(currentWeek) + price);
+		weeklyRevenue.replace(currentWeek, weeklyRevenue.get(currentWeek) + getFinalPriceForNumberOfHours(hours,day));
 	}
 	
 	public void checkOutCar(DriverAgent car) {

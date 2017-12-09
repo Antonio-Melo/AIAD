@@ -1,34 +1,28 @@
 package Agents;
 
-import repast.simphony.context.Context;
-import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.query.space.grid.GridCell;
-import repast.simphony.query.space.grid.GridCellNgh;
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.SpatialMath;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
-import repast.simphony.util.ContextUtils;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.Random;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import java.util.logging.StreamHandler;
 
+import Agents.DriverAgent.DriverState;
+import behaviors.DriverBehavior;
 import javassist.bytecode.stackmap.TypeData.ClassName;
 import sajas.core.Agent;
 
 public abstract class DriverAgent extends Agent {
 
 	protected final Logger logger = Logger.getLogger(ClassName.class.getName() + IDNumber);
-	
+
 	private static final long serialVersionUID = 1L;
 	private static int IDNumber = 0;
 
@@ -77,7 +71,7 @@ public abstract class DriverAgent extends Agent {
 	 * Driver's state, either driving or parked
 	 */
 	public static enum DriverState {
-		DRIVING, PARKED
+		WAITING, DRIVING, PARKED
 	};
 
 	private int ID;
@@ -102,7 +96,7 @@ public abstract class DriverAgent extends Agent {
 	/*
 	 * Time of arrival at destination
 	 */
-	private int arrival;
+	private double arrival;
 
 	/*
 	 * Maximum price the driver is willing to pay per hour
@@ -118,8 +112,8 @@ public abstract class DriverAgent extends Agent {
 	/*
 	 * Duration (in hours) of the stay in the park
 	 */
-	private int durationOfStay;
-	private int initialTime;
+	private double durationOfStay;
+	private double initialTime;
 	private int day;
 
 	/*
@@ -150,34 +144,64 @@ public abstract class DriverAgent extends Agent {
 	protected GridPoint target;
 	private ParkingFacilityAgent[] parkingFacilities;
 	protected ParkingFacilityAgent targetPark;
-
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, int startX, int startY, int destinationX,
-			int destinatioY, int arrival, float maxPricePerHour, int durationOfStay, int maxWalkingDistance,
-			int initialTime, int day, ParkingFacilityAgent[] parkingFacilities) throws SecurityException, IOException {
+	protected ISchedule schedule;
+	
+	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
-		this.startX = startX;
-		this.startY = startY;
-		this.destinationX = destinationX;
-		this.destinationY = destinatioY;
-		this.arrival = arrival;
-		this.maxPricePerHour = maxPricePerHour;
-		this.durationOfStay = durationOfStay;
-		this.maxWalkingDistance = maxWalkingDistance;
-		this.initialTime = initialTime;
-		this.day = day;
+		
+		this.startX = RandomHelper.nextIntFromTo(0, 119);
+		this.startY = RandomHelper.nextIntFromTo(0, 79);
+		this.destinationX = RandomHelper.createNormal(60, 15).nextInt();
+		this.destinationY = RandomHelper.createNormal(40, 10).nextInt();
+		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
+		
+		/*
+		 * 0.0055m/ms -> 20km/h
+		 * 22meters em 3963ms
+		 * In every tick the driver moves one house, which is equivalent to 22m. There for every tick is equivalent to 4000ms
+		 * 1tick = 4000ms = 4s
+		 * 1 dia = 86400s = 21600 ticks
+		 * 1h = 900 ticks
+		 * 1min = 15 ticks
+		 * 
+		 * */
+		
+		
+		if(day < 6) {
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * weekDay * weekCount;	
+		}else {
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;	
+			arrival = 25;
+			while((arrival > 24)) {
+				arrival = RandomHelper.createChiSquare(10).nextDouble();
+			}
+			this.arrival = arrival * 900 * weekDay * weekCount;
+		}	
+
+		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
+		
+
+		if(this.arrival - 1350 < 0)
+			initialTime = 0;
+		else
+			initialTime = arrival - 1350;
+		
+		
 		this.grid = grid;
 		this.space = space;
-		Random random = new Random();
-		this.state = DriverState.DRIVING;
+		this.state = DriverState.WAITING;
 		this.parkingFacilities = parkingFacilities;
-		
+		this.schedule = schedule;
+		Random random = new Random();
+
 		logger.setUseParentHandlers(false);
-		FileHandler fh = new FileHandler("logs/drivers/Driver-"+ID+".txt");
+		FileHandler fh = new FileHandler("logs/drivers/Driver-" + ID + ".txt");
 		fh.setFormatter(new SimpleFormatter());
 		logger.addHandler(fh);
-		logger.info("Driver initialized with destination: " + destinationX + ", " + destinatioY);
+		logger.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
 
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
@@ -185,45 +209,66 @@ public abstract class DriverAgent extends Agent {
 		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
+		this.day = weekDay;
+		
+		
 	}
 
-	@ScheduledMethod(start = 1, interval = 1)
+	public void setup() {
+		ScheduleParameters  params = ScheduleParameters.createRepeating(initialTime, 1);
+		schedule.schedule(params , this , "onTick");
+	}
+	
+	public void launch() {
+		grid.moveTo(this, this.startX, this.startY);
+		space.moveTo(this, this.startX, this.startY);
+	}
+	
+	public void onTick(){
+		if(state == DriverState.WAITING) {
+			grid.moveTo(this, this.startX, this.startY);
+			space.moveTo(this, this.startX, this.startY);
+			state = DriverState.DRIVING;
+		}else if (state == DriverState.DRIVING)
+			drive();
+		else 
+			parkTick();
+	}
+
+	public void parkTick() {
+		if (durationOfStay <= 0) {
+			targetPark.checkOutCar(this);
+			this.doDelete();
+		} else {
+			durationOfStay--;
+		}
+	}
+
 	public void drive() {
-		// Only move if we are not already on target
-		
-		if(this.state == DriverState.PARKED) {
-			if(durationOfStay > 0)
-				durationOfStay--;
-			else {
-				Context<Object> context = ContextUtils.getContext(this);
-				context.remove(this);
-				targetPark.carLeavesPark();
-			}
-		}else {
-			/*
-			 * Checks if driver is in the target or in the cell right next to the target. This verification
-			 * is necessary due to the fact that the convertion from space point to grid point, sometimes
-			 * won't translate to the correct point of the target but to the point next to it.
-			 */
-			if (!((target.getX() == (grid.getLocation(this).getX() + 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
-					(target.getX() == (grid.getLocation(this).getX() - 1) && (target.getY() == (grid.getLocation(this).getY()))) || 
-					(target.getX() == (grid.getLocation(this).getX()) && (target.getY() == (grid.getLocation(this).getY()))))
-					) {
 
-				moveTowards(target);
+		/*
+		 * Checks if driver is in the target or in the cell right next to the
+		 * target.
+		 * 
+		 * This verification is necessary due to the fact that the conversion
+		 * from space point to grid point sometimes won't convert to the correct
+		 * grid point of the target but to the point next to it.
+		 * 
+		 */
+		if (grid.getDistance(grid.getLocation(this), target) > 1)
+			moveTowards(target);
 
-			}
-			else { // reached target
-				if (!park()) {
-					/* Could not park, or target wasn't park */
-					if (!setNextPark()) {
-						/* No suitable park found */
-						achievedUtility = DriverAgent.WORST_UTILITY;
-						Context<Object> context = ContextUtils.getContext(this);
-						context.remove(this);
-					}
+		else { // reached target
+			
+			/* Small frontend fix for the cases where the above happens */
+			grid.moveTo(this, target.getX(), target.getY()); 
+			if (!park()) {
+				/* Could not park, or target wasn't park */
+				if (!setNextPark()) {
+					/* No suitable park found */
+					achievedUtility = DriverAgent.WORST_UTILITY;
+					this.doDelete();
 				}
-				
 			}
 		}
 	}
@@ -246,8 +291,7 @@ public abstract class DriverAgent extends Agent {
 	 * @return value of the utility function
 	 */
 	public double utilityValue(ParkingFacilityAgent parkingFacility) {
-		double pricePerHour = parkingFacility.getPricePerHour();
-		double priceUtility = ALPHA * pricePerHour * durationOfStay;
+		double priceUtility = ALPHA * parkingFacility.getFinalPriceForNumberOfHours(durationOfStay, day);
 
 		NdPoint parkingFacilityPoint = new NdPoint(parkingFacility.getX(), parkingFacility.getY());
 		NdPoint destinationPoint = new NdPoint(destinationX, destinationY);
@@ -278,12 +322,14 @@ public abstract class DriverAgent extends Agent {
 	}
 
 	public boolean park() {
-		if (targetPark == null || targetPark.isFull())
+		if (targetPark == null || targetPark.isFull()) {
 			return false;
+		}
+			
 
 		this.logger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;
-		targetPark.parkCar();
+		targetPark.parkCar(this, durationOfStay, day);
 		return true;
 	}
 
@@ -307,7 +353,7 @@ public abstract class DriverAgent extends Agent {
 		return destinationY;
 	}
 
-	public int getArrival() {
+	public double getArrival() {
 		return arrival;
 	}
 
@@ -315,7 +361,7 @@ public abstract class DriverAgent extends Agent {
 		return maxPricePerHour;
 	}
 
-	public int getDurationOfStay() {
+	public double getDurationOfStay() {
 		return durationOfStay;
 	}
 
@@ -323,11 +369,15 @@ public abstract class DriverAgent extends Agent {
 		return maxWalkingDistance;
 	}
 
-	public int getInitialTime() {
+	public double getInitialTime() {
 		return initialTime;
 	}
 
 	public int getDay() {
 		return day;
+	}
+
+	public DriverState getState() {
+		return state;
 	}
 }

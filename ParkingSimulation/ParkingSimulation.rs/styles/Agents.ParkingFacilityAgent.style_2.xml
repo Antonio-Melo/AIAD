@@ -7,7 +7,7 @@
   <sizeMethodName>getCapacity</sizeMethodName>
   <sizeMaxMethodName>getCapacity</sizeMaxMethodName>
   <label></label>
-  <labelMethod>getCapacity</labelMethod>
+  <labelMethod>getName</labelMethod>
   <labelPosition>bottom</labelPosition>
   <labelPrecision>3</labelPrecision>
   <labelOffset>5.0</labelOffset>
