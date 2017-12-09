@@ -4,8 +4,8 @@
   <sizeMax>15.0</sizeMax>
   <sizeMin>1.0</sizeMin>
   <sizeScale>1.0</sizeScale>
-  <sizeMethodName>getAvailableSpace</sizeMethodName>
-  <sizeMaxMethodName>getAvailableSpace</sizeMaxMethodName>
+  <sizeMethodName>getCapacity</sizeMethodName>
+  <sizeMaxMethodName>getCapacity</sizeMaxMethodName>
   <label></label>
   <labelMethod>getName</labelMethod>
   <labelPosition>bottom</labelPosition>

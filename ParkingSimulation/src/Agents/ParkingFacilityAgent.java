@@ -54,7 +54,7 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public int getAvailableSpace() {
-		return capacity-numCars;
+		return (capacity-numCars);
 	}
 
 	public String getOperator() {
@@ -74,7 +74,7 @@ public class ParkingFacilityAgent extends Agent {
 	}
 
 	public boolean isFull() {
-		return numCars == capacity;
+		return numCars >= capacity;
 	}
 
 	public void parkCar() {

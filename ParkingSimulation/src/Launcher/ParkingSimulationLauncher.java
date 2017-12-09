@@ -38,13 +38,13 @@ import repast.simphony.space.grid.WrapAroundBorders;
 public class ParkingSimulationLauncher extends RepastSLauncher {
 
 	// Number of drivers to deploy
-	private static final int N_DRIVERS = 10;
+	private static final int N_DRIVERS = 500;
 
 	private ContainerController agentContainer;
 	private ContainerController mainContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private int driversCount = 200;
+	private int driversCount = 5000;
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
 	protected ISchedule schedule;
