@@ -41,8 +41,8 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private ContainerController mainContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private int totalDriversPerWeekDay = 500;
-	private int totalDriversPerWeekendDay = 400;
+	private int totalDriversPerWeekDay = 1000;
+	private int totalDriversPerWeekendDay = 800;
 	private int driversCount = 0;
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
