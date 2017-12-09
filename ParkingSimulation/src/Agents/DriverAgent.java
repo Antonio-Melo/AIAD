@@ -146,7 +146,7 @@ public abstract class DriverAgent extends Agent {
 	protected ParkingFacilityAgent targetPark;
 	protected ISchedule schedule;
 	
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule) throws SecurityException, IOException {
+	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
@@ -155,8 +155,7 @@ public abstract class DriverAgent extends Agent {
 		this.startY = RandomHelper.nextIntFromTo(0, 79);
 		this.destinationX = RandomHelper.createNormal(60, 15).nextInt();
 		this.destinationY = RandomHelper.createNormal(40, 10).nextInt();
-		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);			
-		this.day = RandomHelper.nextIntFromTo(1, 7);;
+		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
 		
 		/*
 		 * 0.0055m/ms -> 20km/h
@@ -171,14 +170,14 @@ public abstract class DriverAgent extends Agent {
 		
 		if(day < 6) {
 			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * day;	
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * weekDay * weekCount;	
 		}else {
 			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;	
 			arrival = 25;
 			while((arrival > 24)) {
 				arrival = RandomHelper.createChiSquare(10).nextDouble();
 			}
-			this.arrival = arrival * 900 * day;
+			this.arrival = arrival * 900 * weekDay * weekCount;
 		}	
 
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);

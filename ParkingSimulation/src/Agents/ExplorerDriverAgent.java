@@ -13,8 +13,8 @@ public class ExplorerDriverAgent extends DriverAgent {
 
 	private final ArrayList<ParkingFacilityAgent> parkList;
 
-	public ExplorerDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule) throws SecurityException, IOException {
-		super(space, grid, parkingFacilities, schedule);
+	public ExplorerDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount) throws SecurityException, IOException {
+		super(space, grid, parkingFacilities, schedule, weekDay, weekCount);
 		this.parkList = new ArrayList<>(Arrays.asList(parkingFacilities));
 	}
 	

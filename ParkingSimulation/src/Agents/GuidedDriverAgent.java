@@ -15,9 +15,9 @@ public class GuidedDriverAgent extends DriverAgent {
 
 	private final PriorityQueue<ParkingFacilityAgent> parkList;
 
-	public GuidedDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule)
+	public GuidedDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount)
 			throws SecurityException, IOException {
-		super(space, grid, parkingFacilities, schedule);
+		super(space, grid, parkingFacilities, schedule, weekDay, weekCount);
 
 		this.parkList = new PriorityQueue<>(new ParkingFacilityComparator(this));
 
