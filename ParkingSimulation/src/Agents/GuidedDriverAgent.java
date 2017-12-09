@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.PriorityQueue;
 
+import Launcher.ParkingSimulationLauncher;
 import Utilities.ParkingFacilityComparator;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.Schedule;
@@ -38,7 +39,7 @@ public class GuidedDriverAgent extends DriverAgent {
 	 */
 	@Override
 	public ParkingFacilityAgent getNextPark() {
-		this.logger.finer("Checking next park");
+		ParkingSimulationLauncher.driverLogger.finer("Checking next park");
 		return parkList.poll();
 	}
 

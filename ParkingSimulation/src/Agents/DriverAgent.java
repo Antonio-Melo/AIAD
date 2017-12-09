@@ -15,13 +15,12 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import Agents.DriverAgent.DriverState;
+import Launcher.ParkingSimulationLauncher;
 import behaviors.DriverBehavior;
 import javassist.bytecode.stackmap.TypeData.ClassName;
 import sajas.core.Agent;
 
 public abstract class DriverAgent extends Agent {
-
-	protected final Logger logger = Logger.getLogger(ClassName.class.getName() + IDNumber);
 
 	private static final long serialVersionUID = 1L;
 	private static int IDNumber = 0;
@@ -145,12 +144,13 @@ public abstract class DriverAgent extends Agent {
 	private ParkingFacilityAgent[] parkingFacilities;
 	protected ParkingFacilityAgent targetPark;
 	protected ISchedule schedule;
-	
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount) throws SecurityException, IOException {
+
+	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities,
+			ISchedule schedule, int weekDay, int weekCount) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
-		
+
 		this.startX = RandomHelper.nextIntFromTo(0, 119);
 		this.startY = RandomHelper.nextIntFromTo(0, 79);
 		this.destinationX = RandomHelper.createNormal(60, 14).nextInt();
@@ -158,38 +158,32 @@ public abstract class DriverAgent extends Agent {
 		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
 		this.day = weekDay;
 		/*
-		 * 0.0055m/ms -> 20km/h
-		 * 22meters em 3963ms
-		 * In every tick the driver moves one house, which is equivalent to 22m. There for every tick is equivalent to 4000ms
-		 * 1tick = 4000ms = 4s
-		 * 1 dia = 86400s = 21600 ticks
-		 * 1h = 900 ticks
-		 * 1min = 15 ticks
+		 * 0.0055m/ms -> 20km/h 22meters em 3963ms In every tick the driver
+		 * moves one house, which is equivalent to 22m. There for every tick is
+		 * equivalent to 4000ms 1tick = 4000ms = 4s 1 dia = 86400s = 21600 ticks
+		 * 1h = 900 ticks 1min = 15 ticks
 		 * 
-		 * */
-		
-		
-		if(day < 6) {
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * (day+1) * (weekCount+1);	
-		}else {
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;	
+		 */
+
+		if (day < 6) {
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * (day + 1) * (weekCount + 1);
+		} else {
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;
 			arrival = 25;
-			while((arrival > 24)) {
+			while ((arrival > 24)) {
 				arrival = RandomHelper.createChiSquare(10).nextDouble();
 			}
-			this.arrival = arrival * 900 * (day+1) * (weekCount+1);
-		}	
+			this.arrival = arrival * 900 * (day + 1) * (weekCount + 1);
+		}
 
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
-		
 
-		if(this.arrival - 1350 < 0)
+		if (this.arrival - 1350 < 0)
 			initialTime = 0;
 		else
 			initialTime = arrival - 1350;
-		
-		
+
 		this.grid = grid;
 		this.space = space;
 		this.state = DriverState.WAITING;
@@ -197,11 +191,8 @@ public abstract class DriverAgent extends Agent {
 		this.schedule = schedule;
 		Random random = new Random();
 
-		logger.setUseParentHandlers(false);
-		FileHandler fh = new FileHandler("logs/drivers/Driver-" + ID + ".txt");
-		fh.setFormatter(new SimpleFormatter());
-		logger.addHandler(fh);
-		logger.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
+
+		ParkingSimulationLauncher.driverLogger.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
 
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
@@ -209,28 +200,27 @@ public abstract class DriverAgent extends Agent {
 		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
-		
-		
+
 	}
 
 	public void setup() {
-		ScheduleParameters  params = ScheduleParameters.createRepeating(initialTime, 1);
-		schedule.schedule(params , this , "onTick");
+		ScheduleParameters params = ScheduleParameters.createRepeating(initialTime, 1);
+		schedule.schedule(params, this, "onTick");
 	}
-	
+
 	public void launch() {
 		grid.moveTo(this, this.startX, this.startY);
 		space.moveTo(this, this.startX, this.startY);
 	}
-	
-	public void onTick(){
-		if(state == DriverState.WAITING) {
+
+	public void onTick() {
+		if (state == DriverState.WAITING) {
 			grid.moveTo(this, this.startX, this.startY);
 			space.moveTo(this, this.startX, this.startY);
 			state = DriverState.DRIVING;
-		}else if (state == DriverState.DRIVING)
+		} else if (state == DriverState.DRIVING)
 			drive();
-		else 
+		else
 			parkTick();
 	}
 
@@ -258,9 +248,9 @@ public abstract class DriverAgent extends Agent {
 			moveTowards(target);
 
 		else { // reached target
-			
+
 			/* Small frontend fix for the cases where the above happens */
-			grid.moveTo(this, target.getX(), target.getY()); 
+			grid.moveTo(this, target.getX(), target.getY());
 			if (!park()) {
 				/* Could not park, or target wasn't park */
 				if (!setNextPark()) {
@@ -313,10 +303,10 @@ public abstract class DriverAgent extends Agent {
 		targetPark = getNextPark();
 		if (targetPark != null) {
 			target = new GridPoint(targetPark.getX(), targetPark.getY());
-			this.logger.fine("Set target to park " + targetPark.getParkName());
+			ParkingSimulationLauncher.driverLogger.fine("Set target to park " + targetPark.getParkName());
 			return true;
 		}
-		this.logger.fine("No suitable park found");
+		ParkingSimulationLauncher.driverLogger.fine("No suitable park found");
 		return false;
 	}
 
@@ -324,9 +314,8 @@ public abstract class DriverAgent extends Agent {
 		if (targetPark == null || targetPark.isFull()) {
 			return false;
 		}
-			
 
-		this.logger.finer("Parked in park " + targetPark.getName());
+		ParkingSimulationLauncher.driverLogger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;
 		targetPark.parkCar(this, durationOfStay, day);
 		return true;

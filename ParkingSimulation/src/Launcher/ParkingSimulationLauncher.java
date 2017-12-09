@@ -2,6 +2,9 @@ package Launcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import Agents.DriverAgent;
 import Agents.ExplorerDriverAgent;
@@ -10,6 +13,7 @@ import Agents.ParkingFacilityAgent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
+import javassist.bytecode.stackmap.TypeData.ClassName;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
@@ -42,6 +46,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	protected ISchedule schedule;
 	private int weekDay = 0;
 	private int weekCount = 0;
+	public static final Logger driverLogger = Logger.getLogger("DriverLogger");
 	private String experiment;
 	
 	public static void main(String[] args) {
@@ -242,6 +247,17 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	@Override
 	public Context build(Context<Object> context) {
 		context.setId("ParkingSimulation");
+		
+		driverLogger.setUseParentHandlers(false);
+		FileHandler fh = null;
+		try {
+			fh = new FileHandler("logs/drivers/drivers.txt");
+		} catch (SecurityException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		fh.setFormatter(new SimpleFormatter());
+		driverLogger.addHandler(fh);
 		
 		repast.simphony.parameter.Parameters parameters = RunEnvironment.getInstance().getParameters();
 		this.totalDriversPerWeekDay = parameters.getInteger("driver_count_weekdays");
