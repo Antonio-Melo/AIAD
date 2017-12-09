@@ -9,7 +9,7 @@ public class DriverBehavior extends TickerBehaviour {
 	private static final long serialVersionUID = 1L;
 
 	public DriverBehavior(DriverAgent driver, long period) {
-		super(driver, period);
+		super(driver, 1);
 	}
 	
 	public void onTick(){

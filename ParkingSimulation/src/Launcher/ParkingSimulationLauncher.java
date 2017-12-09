@@ -17,6 +17,10 @@ import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.Schedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
@@ -33,17 +37,19 @@ import repast.simphony.space.grid.WrapAroundBorders;
 
 public class ParkingSimulationLauncher extends RepastSLauncher {
 
-	// Number of drivers to deploy
-	private static final int N_DRIVERS = 10;
-
 	private ContainerController agentContainer;
 	private ContainerController mainContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private int driversCount = 200;
+	private int totalDriversPerWeekDay = 1000;
+	private int totalDriversPerWeekendDay = 800;
+	private int driversCount = 0;
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
-
+	protected ISchedule schedule;
+	private int weekDay = 1;
+	private int weekCount = 1;
+	
 	public static void main(String[] args) {
 		ParkingSimulationLauncher model = new ParkingSimulationLauncher();
 	}
@@ -59,15 +65,12 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		Profile profile = new ProfileImpl();
 		mainContainer = runtime.createMainContainer(profile);
 		agentContainer = mainContainer;
-
+		schedule = RunEnvironment.getInstance().getCurrentSchedule();
 		launchAgents();
 	}
 
 	private void launchAgents() {
-
-		/* Create the agents */
-		try {
-			parkingFacilities = new ParkingFacilityAgent[] {
+		parkingFacilities = new ParkingFacilityAgent[] {
 					new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, (float) 1.43, (float) 9),
 					new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 65, 500, (float) 2.22,
 							(float) 13),
@@ -91,37 +94,55 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 88, 40, 610, (float) 1.43,
 							(float) 25) };
 
-			drivers = new DriverAgent[driversCount];
-
-			for (int i = 0; i < driversCount / 2; i++)
-				drivers[i] = new ExplorerDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119),
-						RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(),
-						RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
-
-			for (int i = driversCount / 2; i < driversCount; i++)
-				drivers[i] = new GuidedDriverAgent(space, grid, RandomHelper.nextIntFromTo(0, 119),
-						RandomHelper.nextIntFromTo(0, 79), RandomHelper.createNormal(60, 15).nextInt(),
-						RandomHelper.createNormal(40, 10).nextInt(), i, i, i, i, i, i, parkingFacilities);
-
-		} catch (SecurityException | IOException e) {
-			e.printStackTrace();
-		}
-
 		/* Add the agents to the JADE container */
 		try {
 			int i = 0;
 			for (ParkingFacilityAgent park : parkingFacilities) {
 				agentContainer.acceptNewAgent("park-" + (i++), park).start();
 			}
-
-			i = 0;
-			for (DriverAgent driver : drivers) {
-				agentContainer.acceptNewAgent("driver-" + (i++), driver).start();
-			}
-
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
+		
+		ScheduleParameters  params = ScheduleParameters.createRepeating(1, 21600);
+		schedule.schedule(params , this , "launchDrivers");
+	}
+	
+	public void launchDrivers() throws SecurityException, IOException {
+		
+		
+		if(weekDay < 6) {
+			drivers = new DriverAgent[totalDriversPerWeekDay];
+			for (int i = 0; i < totalDriversPerWeekDay / 2; i++) {		
+				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+			}
+			for (int i = totalDriversPerWeekDay / 2; i < totalDriversPerWeekDay; i++)
+				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+		}
+		else {
+			drivers = new DriverAgent[totalDriversPerWeekendDay];
+			for (int i = 0; i < totalDriversPerWeekendDay / 2; i++) {		
+				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+			}
+			for (int i = totalDriversPerWeekendDay / 2; i < totalDriversPerWeekendDay; i++)
+				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+		}		
+				
+		/* Add the agents to the JADE container */
+		try {
+			for (DriverAgent driver : drivers) {
+				driversCount++;
+				agentContainer.acceptNewAgent("driver-" + (driversCount++), driver).start();
+			}
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
+		
+		weekDay++;
+		weekCount++;
+		
+		if(weekDay > 7)
+			weekDay = 1;
 	}
 
 	@Override
@@ -136,9 +157,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 
 		// Set the boolean to true if more than one car can occupy the same
 		// space
-		grid = gridFactory.createGrid("grid", context,
-				new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
-
+		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
 		return super.build(context);
 	}
 }
