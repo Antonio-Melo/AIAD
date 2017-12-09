@@ -2,6 +2,7 @@ package Agents;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import repast.simphony.engine.watcher.Watch;
@@ -119,7 +120,7 @@ public class ParkingFacilityAgent extends Agent {
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
 
-	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, List<Double> priceSchema, String name, String operator, int x,
+	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, ArrayList<Double> priceSchema, String name, String operator, int x,
 			int y, int capacity, double priceHour, double maxPrice, double minPrice, boolean dynamic, boolean lastUpdateDecision,double learningRate, double capacityDiscount) {
 		
 		this.numCars = 0;
@@ -303,8 +304,9 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public void updatePricePerHour() {
-		
-		
+		for(int i = 0; i < 7 ; i++) {
+			priceSchema.set(i, updateChosenParameter(priceSchema.get(i)));
+		}
 	}
 	
 	public void updateMinPrice() {
