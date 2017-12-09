@@ -202,7 +202,7 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public void nextWeek() {
-		currentWeek +=1;
+		weeklyRevenue.put(currentWeek++, 0d);
 	}
 	
 	public void parkCar(DriverAgent car, double hours, int day) {
@@ -350,5 +350,9 @@ public class ParkingFacilityAgent extends Agent {
 	public double calculateRevenuePercentil() {
 		if(currentWeek ==0) return 0;
 		else return ((weeklyRevenue.get(currentWeek)-weeklyRevenue.get(currentWeek-1))/weeklyRevenue.get(currentWeek-1));
+	}
+	
+	public double currentRevenue() {
+		return weeklyRevenue.get(currentWeek);
 	}
 }

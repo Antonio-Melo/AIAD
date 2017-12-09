@@ -153,8 +153,8 @@ public abstract class DriverAgent extends Agent {
 		
 		this.startX = RandomHelper.nextIntFromTo(0, 119);
 		this.startY = RandomHelper.nextIntFromTo(0, 79);
-		this.destinationX = RandomHelper.createNormal(60, 15).nextInt();
-		this.destinationY = RandomHelper.createNormal(40, 10).nextInt();
+		this.destinationX = RandomHelper.createNormal(60, 14).nextInt();
+		this.destinationY = RandomHelper.createNormal(40, 9).nextInt();
 		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
 		this.day = weekDay;
 		/*
