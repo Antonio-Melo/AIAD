@@ -285,6 +285,7 @@ public class ParkingFacilityAgent extends Agent {
 		}
 		
 		incUpdate();
+		nextWeek();
 	}
 	
 	public void checkParameterUpdates() {

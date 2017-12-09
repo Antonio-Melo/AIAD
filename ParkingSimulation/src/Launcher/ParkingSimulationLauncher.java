@@ -230,8 +230,13 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		weekDay++;
 		weekCount++;
 		
-		if(weekDay > 6)
+		if(weekDay == 7) {
 			weekDay = 0;
+			for(ParkingFacilityAgent park: parkingFacilities) {
+				park.updateParameter();
+			}
+		}
+			
 	}
 
 	@Override
