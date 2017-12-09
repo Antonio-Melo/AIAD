@@ -137,6 +137,7 @@ public class ParkingFacilityAgent extends Agent {
 		this.driversInsideThePark = new HashMap<Integer,Double>();
 		this.priceSchema = priceSchema;
 		this.weeklyRevenue = new HashMap<Integer,Double>();
+		this.weeklyRevenue.put(0, 0d);
 		this.learningRate = 0.3;
 		this.consecutiveUpdates = 0;
 		this.parameter = UpdateParameters.PRICE_PER_HOUR;

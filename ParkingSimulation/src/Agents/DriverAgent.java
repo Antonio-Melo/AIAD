@@ -156,7 +156,7 @@ public abstract class DriverAgent extends Agent {
 		this.destinationX = RandomHelper.createNormal(60, 15).nextInt();
 		this.destinationY = RandomHelper.createNormal(40, 10).nextInt();
 		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
-		
+		this.day = weekDay;
 		/*
 		 * 0.0055m/ms -> 20km/h
 		 * 22meters em 3963ms
@@ -171,14 +171,14 @@ public abstract class DriverAgent extends Agent {
 		
 		if(day < 6) {
 			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * (weekDay+1) * weekCount;	
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble() * 900 * (day+1) * (weekCount+1);	
 		}else {
 			this.durationOfStay = RandomHelper.nextDoubleFromTo(1, 8.5) * 900;	
 			arrival = 25;
 			while((arrival > 24)) {
 				arrival = RandomHelper.createChiSquare(10).nextDouble();
 			}
-			this.arrival = arrival * 900 * (weekDay+1) * weekCount;
+			this.arrival = arrival * 900 * (day+1) * (weekCount+1);
 		}	
 
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
@@ -209,7 +209,6 @@ public abstract class DriverAgent extends Agent {
 		this.priceCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.walkingDistCoefficient = COEF_MIN + ((COEF_MAX - COEF_MIN) * random.nextDouble());
 		this.maxUtility = random.nextDouble() * UTILITY_MAX;
-		this.day = weekDay;
 		
 		
 	}
