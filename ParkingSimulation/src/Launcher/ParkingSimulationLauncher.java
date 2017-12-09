@@ -41,7 +41,8 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private ContainerController mainContainer;
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private int totalDriversPerDay = 200;
+	private int totalDriversPerWeekDay = 500;
+	private int totalDriversPerWeekendDay = 400;
 	private int driversCount = 0;
 	private ParkingFacilityAgent[] parkingFacilities;
 	private DriverAgent[] drivers;
@@ -108,21 +109,25 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	}
 	
 	public void launchDrivers() throws SecurityException, IOException {
-		if(weekDay < 6)
-			drivers = new DriverAgent[totalDriversPerDay];
-		else
-			drivers = new DriverAgent[totalDriversPerDay-50];
 		
-		if(weekDay > 7)
-			weekDay = 1;
 		
-		for (int i = 0; i < totalDriversPerDay / 2; i++) {		
-			drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+		if(weekDay < 6) {
+			drivers = new DriverAgent[totalDriversPerWeekDay];
+			for (int i = 0; i < totalDriversPerWeekDay / 2; i++) {		
+				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+			}
+			for (int i = totalDriversPerWeekDay / 2; i < totalDriversPerWeekDay; i++)
+				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
 		}
-		for (int i = totalDriversPerDay / 2; i < totalDriversPerDay; i++)
-			drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
-		
-		
+		else {
+			drivers = new DriverAgent[totalDriversPerWeekendDay];
+			for (int i = 0; i < totalDriversPerWeekendDay / 2; i++) {		
+				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+			}
+			for (int i = totalDriversPerWeekendDay / 2; i < totalDriversPerWeekendDay; i++)
+				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
+		}		
+				
 		/* Add the agents to the JADE container */
 		try {
 			for (DriverAgent driver : drivers) {
@@ -135,6 +140,9 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		
 		weekDay++;
 		weekCount++;
+		
+		if(weekDay > 7)
+			weekDay = 1;
 	}
 
 	@Override
