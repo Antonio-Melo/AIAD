@@ -23,6 +23,7 @@ import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.ScheduleParameters;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.RandomCartesianAdder;
 import repast.simphony.space.grid.Grid;
@@ -73,123 +74,123 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private void launchAgents() {
 		parkingFacilities = new ParkingFacilityAgent[] {
 					new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					}}, 9d, 1.43d, true, true, 0.3, 0.3),
 					
 					new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 65, 500, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					}}, 13d, 2.22d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 44, 71, 351, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					}}, 13d, 2.22d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 47, 49, 407, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					}}, 25d, 2.73d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 58, 63, 335,new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					}}, 13d, 1.89d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 59, 55, 1082, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					}}, 25d, 2.73d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 61, 38, 545, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(3.53d);
+					    add(3.53d);
+					    add(3.53d);
+					    add(3.53d);
+					    add(3.53d);
+					    add(3.53d);
+					    add(3.53d);
+					}}, 35d, 3.53d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 69, 65, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					    add(1.89d);
+					}}, 13d, 1.89d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 62, 350, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					    add(2.73d);
+					}}, 25d, 2.73d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 34, 449, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					}}, 13d, 2.22d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 17, 297, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					    add(2.22d);
+					}}, 13d, 2.22d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 90, 51, 303, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3),
+						add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					}}, 25d, 1.43d, true, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 88, 40, 610, new ArrayList<Double>() {{
-						add(1d);
-					    add(2d);
-					    add(3d);
-					    add(3d);
-					    add(3d);
-					    add(5d);
-					    add(5d);
-					}}, 20d, 1d, true, true, 0.3, 0.3) };
+						add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					    add(1.43d);
+					}}, 25d, 1.43d, true, true, 0.3, 0.3) };
 
 		/* Add the agents to the JADE container */
 		try {
@@ -200,52 +201,83 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
-		
 		ScheduleParameters  params = ScheduleParameters.createRepeating(1, 21600);
 		schedule.schedule(params , this , "launchDrivers");
 	}
-	
-	public void launchDrivers() throws SecurityException, IOException {
-
-		if(weekDay < 5) {
-			drivers = new DriverAgent[totalDriversPerWeekDay];
-			for (int i = 0; i < totalDriversPerWeekDay / 2; i++) {		
-				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
-			}
-			for (int i = totalDriversPerWeekDay / 2; i < totalDriversPerWeekDay; i++)
-				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
-		}
-		else {
-			drivers = new DriverAgent[totalDriversPerWeekendDay];
-			for (int i = 0; i < totalDriversPerWeekendDay / 2; i++) {		
-				drivers[i] = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
-			}
-			for (int i = totalDriversPerWeekendDay / 2; i < totalDriversPerWeekendDay; i++)
-				drivers[i] = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount);
-		}		
-				
-		/* Add the agents to the JADE container */
-		try {
-			driversCount = 0;
-			for (DriverAgent driver : drivers) {
-				driversCount++;
-				agentContainer.acceptNewAgent("driver-" + (driversCount++), driver).start();
-			}
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
 		
-		weekDay++;
-		weekCount++;
+	public void scheduleLaunchExplorerDriver(int weekDay, int weekCount) {
+		double initialTime = 0;
+		if(weekDay < 5) {
+			initialTime = RandomHelper.createChiSquare(8).nextDouble();	
+		}else {
+			initialTime = 25;
+			while((initialTime > 24)) {
+				initialTime = RandomHelper.createChiSquare(10).nextDouble();
+			}
+		}
 		
 		if(weekDay == 7) {
 			weekDay = 0;
+		}
+		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * 900 +  (21600 * weekDay) + (21600 * 7 * weekCount));
+		schedule.schedule(params , this , "launchExplorerDriver", weekDay, weekCount, initialTime);	
+	}
+	
+	public void scheduleLaunchGuidedDriver(int weekDay, int weekCount) {
+		double initialTime = 0;
+		if(weekDay < 5) {
+			initialTime = RandomHelper.createChiSquare(8).nextDouble();	
+		}else {
+			initialTime = 25;
+			while((initialTime > 24)) {
+				initialTime = RandomHelper.createChiSquare(10).nextDouble();
+			}
+		}
+		if(weekDay == 7) {
+			weekDay = 0;
+		}
+		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * 900 +  (21600 * weekDay) + (21600 * 7 * weekCount));
+		schedule.schedule(params , this , "launchGuidedDriver", weekDay, weekCount, initialTime);	
+	}
+	
+	public void launchExplorerDriver(int weekDay, int weekCount, double initialTime) throws SecurityException, IOException, StaleProxyException {
+		DriverAgent driver = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime);
+		agentContainer.acceptNewAgent("driver-" + (driversCount++), driver).start();
+		driversCount++;
+	}
+	
+	public void launchGuidedDriver(int weekDay, int weekCount, double initialTime) throws SecurityException, IOException, StaleProxyException {
+		DriverAgent driver = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime);
+		agentContainer.acceptNewAgent("driver-" + (driversCount++), driver).start();
+		driversCount++;
+	}
+	
+	public void launchDrivers() throws SecurityException, IOException {
+		if(weekDay == 7) {
+			weekCount++;
+			weekDay = 0;
 			for(ParkingFacilityAgent park: parkingFacilities) {
 				park.updateParameter();
+				utilityCollector.registerWeek();
 			}
-			utilityCollector.registerWeek();
 		}
-			
+		if(weekDay < 5) {
+			for (int i = 0; i < totalDriversPerWeekDay / 2; i++) {		
+				scheduleLaunchExplorerDriver(weekDay, weekCount);
+			}
+			for (int i = totalDriversPerWeekDay / 2; i < totalDriversPerWeekDay; i++)
+				scheduleLaunchGuidedDriver(weekDay, weekCount);
+			}
+		else {
+			for (int i = 0; i < totalDriversPerWeekendDay / 2; i++) {		
+				scheduleLaunchExplorerDriver(weekDay, weekCount);
+			}
+			for (int i = totalDriversPerWeekendDay / 2; i < totalDriversPerWeekendDay; i++) {
+				scheduleLaunchGuidedDriver(weekDay, weekCount);
+			}
+		}
+
+		weekDay++;			
 	}
 
 	@Override

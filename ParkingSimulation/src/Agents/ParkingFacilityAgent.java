@@ -202,7 +202,8 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public void nextWeek() {
-		weeklyRevenue.put(++currentWeek, 0d);
+		currentWeek++;
+		weeklyRevenue.put(currentWeek, 0d);
 	}
 	
 	public void parkCar(DriverAgent car, double hours, int day) {
@@ -352,7 +353,16 @@ public class ParkingFacilityAgent extends Agent {
 		else return ((weeklyRevenue.get(currentWeek)-weeklyRevenue.get(currentWeek-1))/weeklyRevenue.get(currentWeek-1));
 	}
 	
-	public double currentRevenue() {
-		return weeklyRevenue.get(currentWeek);
-	}
+	 public double currentRevenue() { 
+	    return weeklyRevenue.get(currentWeek); 
+	 } 
+	 
+	 public double getTicketPrice() {
+		 double price = 0;
+		 for(int i = 0; i < 7; i++) {
+			 price += priceSchema.get(i);
+		 }
+		 return (price/7);
+	 }
+	
 }

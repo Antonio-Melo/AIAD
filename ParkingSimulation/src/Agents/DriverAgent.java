@@ -1,5 +1,7 @@
 package Agents;
 
+import repast.simphony.engine.schedule.IAction;
+import repast.simphony.engine.schedule.ISchedulableAction;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.random.RandomHelper;
@@ -144,9 +146,9 @@ public abstract class DriverAgent extends Agent {
 	private ParkingFacilityAgent[] parkingFacilities;
 	protected ParkingFacilityAgent targetPark;
 	protected ISchedule schedule;
-
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities,
-			ISchedule schedule, int weekDay, int weekCount) throws SecurityException, IOException {
+	protected ISchedulableAction action;
+	
+	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
@@ -158,6 +160,7 @@ public abstract class DriverAgent extends Agent {
 		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
 		this.day = weekDay;
 		/*
+<<<<<<< HEAD
 		 * 0.0055m/ms -> 20km/h 22meters em 3963ms In every tick the driver
 		 * moves one house, which is equivalent to 22m. There for every tick is
 		 * equivalent to 4000ms 1tick = 4000ms = 4s 1 dia = 86400s = 21600 ticks
@@ -179,23 +182,41 @@ public abstract class DriverAgent extends Agent {
 			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;
 
 		this.arrival = arrival * 900 * (day + 1) * (weekCount + 1);
-		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
-
-		if (this.arrival - 1350 < 0)
-			initialTime = 0;
+=======
+		 * 0.0055m/ms -> 20km/h
+		 * 22meters em 3963ms
+		 * In every tick the driver moves one house, which is equivalent to 22m. There for every tick is equivalent to 4000ms
+		 * 1tick = 4000ms = 4s
+		 * 1 dia = 86400s = 21600 ticks
+		 * 1h = 900 ticks
+		 * 1min = 15 ticks
+		 * 
+		 * */
+		if(initialTime > 10)
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(0, 2) * 900;	
 		else
-			initialTime = arrival - 1350;
-
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
+			
+		this.initialTime = initialTime * 900  +  (21600 * weekDay * weekCount);
+		this.arrival = initialTime + 1350;
+		
+>>>>>>> develop
+		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
 		this.grid = grid;
 		this.space = space;
 		this.state = DriverState.WAITING;
 		this.parkingFacilities = parkingFacilities;
 		this.schedule = schedule;
+		
+		
 		Random random = new Random();
+<<<<<<< HEAD
 
 		ParkingSimulationLauncher.driverLogger
 				.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
 
+=======
+>>>>>>> develop
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
 		 */
@@ -206,17 +227,12 @@ public abstract class DriverAgent extends Agent {
 	}
 
 	public void setup() {
-		ScheduleParameters params = ScheduleParameters.createRepeating(initialTime, 1);
-		schedule.schedule(params, this, "onTick");
+		ScheduleParameters  params = ScheduleParameters.createRepeating(schedule.getTickCount(), 1);
+		this.action = schedule.schedule(params , this , "onTick");
 	}
-
-	public void launch() {
-		grid.moveTo(this, this.startX, this.startY);
-		space.moveTo(this, this.startX, this.startY);
-	}
-
-	public void onTick() {
-		if (state == DriverState.WAITING) {
+	
+	public void onTick(){
+		if(state == DriverState.WAITING) {
 			grid.moveTo(this, this.startX, this.startY);
 			space.moveTo(this, this.startX, this.startY);
 			state = DriverState.DRIVING;
@@ -230,6 +246,13 @@ public abstract class DriverAgent extends Agent {
 		if (durationOfStay <= 0) {
 			targetPark.checkOutCar(this);
 			this.doDelete();
+			schedule.removeAction(action);
+			try {
+				this.finalize();
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			durationOfStay--;
 		}
@@ -258,6 +281,13 @@ public abstract class DriverAgent extends Agent {
 					achievedUtility = DriverAgent.WORST_UTILITY;
 					ParkingSimulationLauncher.utilityCollector.registerUtility(achievedUtility);
 					this.doDelete();
+					schedule.removeAction(action);
+					try {
+						this.finalize();
+					} catch (Throwable e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}

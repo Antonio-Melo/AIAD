@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<parameters>
+					<parameter name="randomSeed" displayName="Default Random Seed" type="int" 
+						defaultValue="__NULL__"
+						isReadOnly="true" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="experiment" displayName="Experiment" type="java.lang.String" 
+						defaultValue="None" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
+									values="None Experiment1 Experiment2 Experiment3 "
+						
+		/>
+				<parameter name="driver_count_weekdays" displayName="Driver Count (On Weekdays)" type="int" 
+						defaultValue="100" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="driver_count_weekends" displayName="Driver Count (Weekends)" type="int" 
+						defaultValue="80" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+		</parameters>
+
+
