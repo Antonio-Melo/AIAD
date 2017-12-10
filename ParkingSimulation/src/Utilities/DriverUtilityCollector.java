@@ -8,7 +8,7 @@ public class DriverUtilityCollector {
 
 	private ArrayList<Double> weeklyUtilities;
 	private int currentWeek = 0;
-	private Double currentUtility;
+	private double currentUtility;
 	
 	public DriverUtilityCollector(){
 		weeklyUtilities = new ArrayList<Double>();
@@ -16,7 +16,7 @@ public class DriverUtilityCollector {
 	}
 	
 	public void registerUtility(double utility){
-		currentUtility = currentUtility.doubleValue() + utility;
+		currentUtility = currentUtility + utility;
 	}
 	
 	public void registerWeek(){
@@ -27,7 +27,7 @@ public class DriverUtilityCollector {
 	
 	public Double getCurrentUtility(){
 		System.out.println("hey");
-		return currentUtility.doubleValue();
+		return currentUtility;
 	}
 	
 	public Double getUtilityForWeek(int week){
@@ -38,7 +38,7 @@ public class DriverUtilityCollector {
 		 if(currentWeek == 0)
 			 return 0d;
 		 else {
-			 return weeklyUtilities.get(currentWeek-1).doubleValue();
+			 return weeklyUtilities.get(currentWeek-1);
 		 } 
 	 } 
 }
