@@ -202,15 +202,13 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public void nextWeek() {
-		weeklyRevenue.put(currentWeek++, 0d);
+		currentWeek++;
+		weeklyRevenue.put(currentWeek, 0d);
 	}
 	
 	public void parkCar(DriverAgent car, double hours, int day) {
 		driversInsideThePark.put(car.getID(), hours);
 		incNumCar();
-		System.out.println(day);
-		System.out.println(getFinalPriceForNumberOfHours(hours,day));
-		System.out.println(weeklyRevenue.get(currentWeek));
 		weeklyRevenue.replace(currentWeek, weeklyRevenue.get(currentWeek) + getFinalPriceForNumberOfHours(hours,day));
 	}
 	
