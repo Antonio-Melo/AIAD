@@ -370,4 +370,8 @@ public abstract class DriverAgent extends Agent {
 	public DriverState getState() {
 		return state;
 	}
+	
+	public double getAllUtilities() {
+		return ParkingSimulationLauncher.utilityCollector.getCurrentUtility();
+	}
 }

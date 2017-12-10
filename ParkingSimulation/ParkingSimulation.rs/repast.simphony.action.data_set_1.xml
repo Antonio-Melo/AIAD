@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>Weekly Revenue</name>
+  <name>Social Welfare</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
@@ -16,12 +16,12 @@
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Revenue</string>
+      <string>Utility</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Revenue</id>
-        <className>Agents.ParkingFacilityAgent</className>
-        <methodName>currentRevenue</methodName>
-        <aggType>SUM</aggType>
+        <id>Utility</id>
+        <className>Agents.DriverAgent</className>
+        <methodName>getAllUtilities</methodName>
+        <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

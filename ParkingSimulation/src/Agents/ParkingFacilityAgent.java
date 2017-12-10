@@ -354,6 +354,8 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	 public double currentRevenue() { 
+		System.out.println(currentWeek);
+		System.out.println(weeklyRevenue.get(currentWeek));
 	    return weeklyRevenue.get(currentWeek); 
 	 } 
 	 
