@@ -29,8 +29,13 @@ public class GuidedDriverAgent extends DriverAgent {
 	}
 	
 	public void setup(){
-		super.setup();
-		this.setNextPark();
+		if(!this.setNextPark()) {
+			achievedUtility = DriverAgent.WORST_UTILITY;
+			utilityCollector.registerUtility(achievedUtility);
+			this.doDelete();
+		}else {
+			super.setup();
+		}
 	}
 
 	/**
@@ -40,8 +45,16 @@ public class GuidedDriverAgent extends DriverAgent {
 	 */
 	@Override
 	public ParkingFacilityAgent getNextPark() {
+		ParkingFacilityAgent nextPark = parkList.poll();
+		GridPoint parkPoint = grid.getLocation(nextPark);
+		GridPoint destinationPoint = new GridPoint(getDestinationX(), getDestinationY());
+		double pricePerHour = nextPark.getCurrentPricePerHour(getDay());
+		
+		while ((pricePerHour > getMaxPricePerHour() || grid.getDistance(destinationPoint, parkPoint) > getMaxWalkingDistance()) && nextPark != null)
+			nextPark = parkList.poll();
+		
 		ParkingSimulationLauncher.driverLogger.finer("Checking next park");
-		return parkList.poll();
+		return nextPark;
 	}
 
 }

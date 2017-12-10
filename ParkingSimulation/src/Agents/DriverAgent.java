@@ -241,6 +241,9 @@ public abstract class DriverAgent extends Agent {
 		 * grid point of the target but to the point next to it.
 		 * 
 		 */
+		System.out.println(this.getClass());
+		System.out.println(target);
+		System.out.println(grid.getLocation(this));
 		if (grid.getDistance(grid.getLocation(this), target) > 1){
 			moveTowards(target);
 		}
@@ -317,6 +320,12 @@ public abstract class DriverAgent extends Agent {
 		if (targetPark == null || targetPark.isFull()) {
 			return false;
 		}
+		
+		GridPoint parkPoint = new GridPoint(targetPark.getX(), targetPark.getY());
+		GridPoint destinationPoint = new GridPoint(getDestinationX(), getDestinationY());
+		
+		if(targetPark.getCurrentPricePerHour(day) > maxPricePerHour || grid.getDistance(parkPoint, destinationPoint) > maxWalkingDistance || utilityValue(targetPark) < 0)
+			return false;
 
 		ParkingSimulationLauncher.driverLogger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;

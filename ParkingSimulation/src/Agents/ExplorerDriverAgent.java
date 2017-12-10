@@ -20,8 +20,8 @@ public class ExplorerDriverAgent extends DriverAgent {
 	}
 	
 	public void setup(){
-		super.setup();
 		this.target = new GridPoint(this.getDestinationX(), this.getDestinationY());
+		super.setup();
 	}
 
 	/**
@@ -50,6 +50,7 @@ public class ExplorerDriverAgent extends DriverAgent {
 		}
 
 		// Returns the closest park, and removes it from the list		
+		System.out.println(parkList.get(closestParkIndex));
 		return parkList.remove(closestParkIndex);
 	}
 

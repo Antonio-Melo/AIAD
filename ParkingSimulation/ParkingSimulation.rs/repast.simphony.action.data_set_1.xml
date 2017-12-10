@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>Social Welfare</name>
+  <name>Mean Ticket Price</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
@@ -7,21 +7,21 @@
   <scheduleParams>
     <start>75600.0</start>
     <interval>151200.0</interval>
-    <priority>Infinity</priority>
-    <pType>FIRST</pType>
+    <priority>-Infinity</priority>
+    <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1089319269</hashCode>
+    <hashCode>-1478531172</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Utility</string>
+      <string>Ticket Price</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Utility</id>
-        <className>Agents.DriverAgent</className>
-        <methodName>getAllUtilities</methodName>
-        <aggType>MAX</aggType>
+        <id>Ticket Price</id>
+        <className>Agents.ParkingFacilityAgent</className>
+        <methodName>getTicketPrice</methodName>
+        <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

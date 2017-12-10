@@ -352,12 +352,18 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public double calculateRevenuePercentil() {
-		if(currentWeek == 0) return 0;
-		else return ((weeklyRevenue.get(currentWeek)-weeklyRevenue.get(currentWeek-1))/weeklyRevenue.get(currentWeek-1));
+		if(currentWeek == 0) return 1;
+		else {
+			if(weeklyRevenue.get(currentWeek-1) <= 0)
+				return 1;
+			else if(weeklyRevenue.get(currentWeek) == 0)
+				return 0;
+			else
+				return ((weeklyRevenue.get(currentWeek)-weeklyRevenue.get(currentWeek-1))/weeklyRevenue.get(currentWeek-1));
+		} 
 	}
 	
 	 public double currentRevenue() { 
-		 System.out.println("Week: " +  currentWeek);
 		 if(currentWeek == 0)
 			 return 0;
 		 else {
@@ -384,6 +390,10 @@ public class ParkingFacilityAgent extends Agent {
 	 
 	 public double getTicketPrice() {
 		 return lastWeekMeanTicketPrice;
+	 }
+	 
+	 public double getCurrentPricePerHour(int currentDay) {
+		 return priceSchema.get(currentDay);
 	 }
 	
 }
