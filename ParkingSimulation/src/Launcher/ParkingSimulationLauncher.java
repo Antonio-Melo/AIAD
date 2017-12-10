@@ -49,7 +49,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private int weekDay = 0;
 	private int weekCount = 0;
 	public static final Logger driverLogger = Logger.getLogger("DriverLogger");
-	public static final DriverUtilityCollector utilityCollector = new DriverUtilityCollector();
+	public DriverUtilityCollector utilityCollector = new DriverUtilityCollector();
 	private String experiment;
 	
 	public static void main(String[] args) {
@@ -72,6 +72,12 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	}
 
 	private void launchAgents() {
+		this.utilityCollector = new DriverUtilityCollector();
+		try {
+			agentContainer.acceptNewAgent("UtilityCollector", this.utilityCollector).start();
+		} catch (StaleProxyException e1) {
+			e1.printStackTrace();
+		}		
 		parkingFacilities = new ParkingFacilityAgent[] {
 					new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, new ArrayList<Double>() {{
 						add(1.43d);
@@ -241,13 +247,13 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	}
 	
 	public void launchExplorerDriver(int weekDay, int weekCount, double initialTime) throws SecurityException, IOException, StaleProxyException {
-		DriverAgent driver = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime);
+		DriverAgent driver = new ExplorerDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime, utilityCollector);
 		agentContainer.acceptNewAgent("driver-" + (driversCount++), driver).start();
 		driversCount++;
 	}
 	
 	public void launchGuidedDriver(int weekDay, int weekCount, double initialTime) throws SecurityException, IOException, StaleProxyException {
-		DriverAgent driver = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime);
+		DriverAgent driver = new GuidedDriverAgent(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime, utilityCollector);
 		agentContainer.acceptNewAgent("driver-" + (driversCount++), driver).start();
 		driversCount++;
 	}

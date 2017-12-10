@@ -18,6 +18,7 @@ import java.util.logging.SimpleFormatter;
 
 import Agents.DriverAgent.DriverState;
 import Launcher.ParkingSimulationLauncher;
+import Utilities.DriverUtilityCollector;
 import behaviors.DriverBehavior;
 import javassist.bytecode.stackmap.TypeData.ClassName;
 import sajas.core.Agent;
@@ -147,11 +148,13 @@ public abstract class DriverAgent extends Agent {
 	protected ParkingFacilityAgent targetPark;
 	protected ISchedule schedule;
 	protected ISchedulableAction action;
+	DriverUtilityCollector utilityCollector;
 	
-	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime) throws SecurityException, IOException {
+	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime, DriverUtilityCollector utilityCollector) throws SecurityException, IOException {
 
 		IDNumber++;
 		ID = IDNumber;
+		this.utilityCollector = utilityCollector;
 
 		this.startX = RandomHelper.nextIntFromTo(0, 119);
 		this.startY = RandomHelper.nextIntFromTo(0, 79);
@@ -248,7 +251,7 @@ public abstract class DriverAgent extends Agent {
 			if (!park()) { // Could not park, or target wasn't park */
 				if (!setNextPark()) { // No suitable park found
 					achievedUtility = DriverAgent.WORST_UTILITY;
-					ParkingSimulationLauncher.utilityCollector.registerUtility(achievedUtility);
+					utilityCollector.registerUtility(achievedUtility);
 					this.doDelete();
 					schedule.removeAction(action);
 					try {
@@ -318,7 +321,7 @@ public abstract class DriverAgent extends Agent {
 		ParkingSimulationLauncher.driverLogger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;
 		this.achievedUtility = utilityValue(targetPark);
-		ParkingSimulationLauncher.utilityCollector.registerUtility(achievedUtility);
+		utilityCollector.registerUtility(achievedUtility);
 		targetPark.parkCar(this, durationOfStay, day);
 		return true;
 	}
@@ -372,6 +375,6 @@ public abstract class DriverAgent extends Agent {
 	}
 	
 	public double getAllUtilities() {
-		return ParkingSimulationLauncher.utilityCollector.lastWeekTotalUtility();
+		return utilityCollector.lastWeekTotalUtility();
 	}
 }

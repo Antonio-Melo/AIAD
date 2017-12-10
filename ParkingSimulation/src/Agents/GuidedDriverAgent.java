@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.PriorityQueue;
 
 import Launcher.ParkingSimulationLauncher;
+import Utilities.DriverUtilityCollector;
 import Utilities.ParkingFacilityComparator;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.Schedule;
@@ -16,9 +17,9 @@ public class GuidedDriverAgent extends DriverAgent {
 
 	private final PriorityQueue<ParkingFacilityAgent> parkList;
 
-	public GuidedDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime)
+	public GuidedDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime, DriverUtilityCollector utilityCollector)
 			throws SecurityException, IOException {
-		super(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime);
+		super(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime, utilityCollector);
 
 		this.parkList = new PriorityQueue<>(new ParkingFacilityComparator(this));
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import Utilities.DriverUtilityCollector;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
@@ -13,8 +14,8 @@ public class ExplorerDriverAgent extends DriverAgent {
 
 	private final ArrayList<ParkingFacilityAgent> parkList;
 
-	public ExplorerDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime) throws SecurityException, IOException {
-		super(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime);
+	public ExplorerDriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime, DriverUtilityCollector utilityCollector) throws SecurityException, IOException {
+		super(space, grid, parkingFacilities, schedule, weekDay, weekCount, initialTime, utilityCollector);
 		this.parkList = new ArrayList<>(Arrays.asList(parkingFacilities));
 	}
 	

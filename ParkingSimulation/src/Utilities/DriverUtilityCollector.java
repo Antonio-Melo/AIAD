@@ -3,8 +3,9 @@ package Utilities;
 import java.util.ArrayList;
 
 import Agents.DriverAgent;
+import sajas.core.Agent;
 
-public class DriverUtilityCollector {
+public class DriverUtilityCollector extends Agent{
 
 	private ArrayList<Double> weeklyUtilities;
 	private int currentWeek = 0;
@@ -26,7 +27,6 @@ public class DriverUtilityCollector {
 	}
 	
 	public Double getCurrentUtility(){
-		System.out.println("hey");
 		return currentUtility.doubleValue();
 	}
 	
@@ -35,9 +35,11 @@ public class DriverUtilityCollector {
 	}
 	
 	 public double lastWeekTotalUtility() { 
+		 System.out.println("Getting utility for week " + (currentWeek - 1));
 		 if(currentWeek == 0)
 			 return 0d;
 		 else {
+			 System.out.println(weeklyUtilities.get(currentWeek-1).doubleValue());
 			 return weeklyUtilities.get(currentWeek-1).doubleValue();
 		 } 
 	 } 
