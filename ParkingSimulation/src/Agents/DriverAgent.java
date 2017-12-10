@@ -160,7 +160,7 @@ public abstract class DriverAgent extends Agent {
 		this.startY = RandomHelper.nextIntFromTo(0, 79);
 		this.destinationX = RandomHelper.createNormal(60, 14).nextInt();
 		this.destinationY = RandomHelper.createNormal(40, 9).nextInt();
-		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
+		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 3.0);
 		this.day = weekDay;
 		/*
 		 * 0.0055m/ms -> 20km/h
@@ -180,7 +180,7 @@ public abstract class DriverAgent extends Agent {
 		this.initialTime = initialTime * 900  +  (21600 * weekDay * weekCount);
 		this.arrival = initialTime + 1350;
 		
-		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
+		this.maxWalkingDistance = RandomHelper.nextIntFromTo(35, 70);
 		this.grid = grid;
 		this.space = space;
 		this.state = DriverState.WAITING;
@@ -242,8 +242,12 @@ public abstract class DriverAgent extends Agent {
 		 * 
 		 */
 		System.out.println(this.getClass());
+		System.out.println(ID);
 		System.out.println(target);
 		System.out.println(grid.getLocation(this));
+		if(target == null || grid.getLocation(this) == null)
+			return; 
+		
 		if (grid.getDistance(grid.getLocation(this), target) > 1){
 			moveTowards(target);
 		}
@@ -253,6 +257,7 @@ public abstract class DriverAgent extends Agent {
 
 			if (!park()) { // Could not park, or target wasn't park */
 				if (!setNextPark()) { // No suitable park found
+					System.out.println("NO PARK FOUND!!!! - ID = " + ID);
 					achievedUtility = DriverAgent.WORST_UTILITY;
 					utilityCollector.registerUtility(achievedUtility);
 					this.doDelete();
