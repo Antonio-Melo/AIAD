@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>Social Welfare</name>
+  <name>Weekly Revenue</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
@@ -7,21 +7,21 @@
   <scheduleParams>
     <start>1.0</start>
     <interval>151250.0</interval>
-    <priority>-Infinity</priority>
-    <pType>LAST</pType>
+    <priority>Infinity</priority>
+    <pType>FIRST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1925321481</hashCode>
+    <hashCode>1457599478</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Utility</string>
+      <string>Revenue</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Utility</id>
-        <className>Agents.DriverAgent</className>
-        <methodName>getAllUtilities</methodName>
-        <aggType>MEAN</aggType>
+        <id>Revenue</id>
+        <className>Agents.ParkingFacilityAgent</className>
+        <methodName>currentRevenue</methodName>
+        <aggType>SUM</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

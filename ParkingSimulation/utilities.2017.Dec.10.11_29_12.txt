@@ -1,0 +1,3 @@
+"tick","Utility"
+1.0,NaN
+151251.0,NaN
