@@ -149,7 +149,7 @@ public abstract class DriverAgent extends Agent {
 	protected ISchedule schedule;
 	protected ISchedulableAction action;
 	DriverUtilityCollector utilityCollector;
-	public static final int TICK_DURATION = 4;
+	public static final int TICK_DURATION = 120;
 	
 	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime, DriverUtilityCollector utilityCollector) throws SecurityException, IOException {
 
