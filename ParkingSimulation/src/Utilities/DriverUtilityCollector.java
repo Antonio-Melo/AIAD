@@ -26,7 +26,7 @@ public class DriverUtilityCollector extends Agent{
 		currentWeek++;
 	}
 	
-	public double getCurrentUtility(){
+	public Double getCurrentUtility(){
 		return currentUtility;
 	}
 	

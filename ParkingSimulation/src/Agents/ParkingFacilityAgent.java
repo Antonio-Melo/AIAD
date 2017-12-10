@@ -119,6 +119,7 @@ public class ParkingFacilityAgent extends Agent {
 	private double capacityDiscount;
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
+	private double lastWeekMeanTicketPrice = 0;
 
 
 	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, String name, String operator, int x,
@@ -203,6 +204,7 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	public void nextWeek() {
+		setMeanTicketPrice();
 		currentWeek++;
 		weeklyRevenue.put(currentWeek, 0d);
 	}
@@ -341,20 +343,21 @@ public class ParkingFacilityAgent extends Agent {
 	public double updateChosenParameter(double parameter) {
 		double newParameter;
 		if(lastUpdateDecision) {
-			newParameter = parameter + learningRate*parameter*(calculateRevenuePercentil()-1);
+			newParameter = parameter + learningRate * parameter * (calculateRevenuePercentil()-1);
 		}else {
-			newParameter = parameter - learningRate*parameter*(calculateRevenuePercentil()-1);
+			newParameter = parameter - learningRate * parameter * (calculateRevenuePercentil()-1);
 		}
 		lastUpdateDecision = (newParameter-parameter > 0) ? true: false;
 		return newParameter;
 	}
 	
 	public double calculateRevenuePercentil() {
-		if(currentWeek ==0) return 0;
+		if(currentWeek == 0) return 0;
 		else return ((weeklyRevenue.get(currentWeek)-weeklyRevenue.get(currentWeek-1))/weeklyRevenue.get(currentWeek-1));
 	}
 	
 	 public double currentRevenue() { 
+		 System.out.println("Week: " +  currentWeek);
 		 if(currentWeek == 0)
 			 return 0;
 		 else {
@@ -362,12 +365,25 @@ public class ParkingFacilityAgent extends Agent {
 		 } 
 	 } 
 	 
-	 public double getTicketPrice() {
+	 public void setMeanTicketPrice() {
 		 double price = 0;
 		 for(int i = 0; i < 7; i++) {
 			 price += priceSchema.get(i);
 		 }
-		 return (price/7);
+		 System.out.println("Week: " +  currentWeek);
+		 System.out.println("Monday: " + priceSchema.get(0));
+		 System.out.println("1: " + priceSchema.get(1));
+		 System.out.println("2: " + priceSchema.get(2));
+		 System.out.println("3: " + priceSchema.get(3));
+		 System.out.println("4: " + priceSchema.get(4));
+		 System.out.println("5: " + priceSchema.get(5));
+		 System.out.println("6: " + priceSchema.get(6));
+		 
+		 lastWeekMeanTicketPrice = (price/7d);
+	 }
+	 
+	 public double getTicketPrice() {
+		 return lastWeekMeanTicketPrice;
 	 }
 	
 }
