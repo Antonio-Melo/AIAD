@@ -372,6 +372,6 @@ public abstract class DriverAgent extends Agent {
 	}
 	
 	public double getAllUtilities() {
-		return ParkingSimulationLauncher.utilityCollector.getCurrentUtility();
+		return ParkingSimulationLauncher.utilityCollector.lastWeekTotalUtility();
 	}
 }

@@ -120,6 +120,7 @@ public class ParkingFacilityAgent extends Agent {
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
 
+
 	public ParkingFacilityAgent(ContinuousSpace<Object> space, Grid<Object> grid, String name, String operator, int x,
 			int y, int capacity, ArrayList<Double> priceSchema, double maxPrice, double minPrice, boolean dynamic, boolean lastUpdateDecision,double learningRate, double capacityDiscount) {
 		
@@ -354,9 +355,11 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	 public double currentRevenue() { 
-		System.out.println(currentWeek);
-		System.out.println(weeklyRevenue.get(currentWeek));
-	    return weeklyRevenue.get(currentWeek); 
+		 if(currentWeek == 0)
+			 return 0;
+		 else {
+			 return weeklyRevenue.get(currentWeek-1); 
+		 } 
 	 } 
 	 
 	 public double getTicketPrice() {

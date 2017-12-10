@@ -33,4 +33,12 @@ public class DriverUtilityCollector {
 	public Double getUtilityForWeek(int week){
 		return weeklyUtilities.get(week);
 	}
+	
+	 public double lastWeekTotalUtility() { 
+		 if(currentWeek == 0)
+			 return 0;
+		 else {
+			 return weeklyUtilities.get(currentWeek-1);
+		 } 
+	 } 
 }
