@@ -7,6 +7,6 @@
     <string>tick</string>
     <string>Utility</string>
   </sourceIds>
-  <fileName>utilities.txt</fileName>
+  <fileName>C:\Users\Pedro\eclipse-workspace\AIAD\ParkingSimulation\output\utilities.txt</fileName>
   <addTimeStamp>true</addTimeStamp>
 </repast.simphony.data2.engine.FileSinkDescriptor>

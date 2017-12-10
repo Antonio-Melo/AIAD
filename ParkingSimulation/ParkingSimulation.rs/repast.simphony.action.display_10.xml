@@ -21,6 +21,10 @@
   </styles>
   <editedStyles>
     <entry>
+      <string>Utilities.DriverUtilityCollector</string>
+      <null/>
+    </entry>
+    <entry>
       <string>Agents.ExplorerDriverAgent</string>
       <string>Agents.ExplorerDriverAgent.style_3.xml</string>
     </entry>
@@ -43,7 +47,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-2122233144</hashCode>
+    <hashCode>738273098</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
@@ -55,15 +59,15 @@
     </entry>
     <entry>
       <string>Agents.ExplorerDriverAgent</string>
-      <int>1</int>
-    </entry>
-    <entry>
-      <string>Agents.GuidedDriverAgent</string>
       <int>2</int>
     </entry>
     <entry>
-      <string>Agents.ParkingFacilityAgent</string>
+      <string>Agents.GuidedDriverAgent</string>
       <int>3</int>
+    </entry>
+    <entry>
+      <string>Agents.ParkingFacilityAgent</string>
+      <int>1</int>
     </entry>
   </layerOrder>
   <projections>

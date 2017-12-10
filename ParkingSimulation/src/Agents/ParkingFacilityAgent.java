@@ -222,7 +222,9 @@ public class ParkingFacilityAgent extends Agent {
 	
 	public double getFinalPriceForNumberOfHours(double hours, int dayOfTheWeek) {
 		double finalPrice = calculateFinalPrice(hours,dayOfTheWeek);
-		finalPrice = calculateOccupationDiscount(finalPrice);
+		
+		if(dynamic)
+			finalPrice = calculateOccupationDiscount(finalPrice);
 		
 		if(finalPrice > maxPrice) {
 			return maxPrice;
@@ -376,15 +378,7 @@ public class ParkingFacilityAgent extends Agent {
 		 for(int i = 0; i < 7; i++) {
 			 price += priceSchema.get(i);
 		 }
-		 System.out.println("Week: " +  currentWeek);
-		 System.out.println("Monday: " + priceSchema.get(0));
-		 System.out.println("1: " + priceSchema.get(1));
-		 System.out.println("2: " + priceSchema.get(2));
-		 System.out.println("3: " + priceSchema.get(3));
-		 System.out.println("4: " + priceSchema.get(4));
-		 System.out.println("5: " + priceSchema.get(5));
-		 System.out.println("6: " + priceSchema.get(6));
-		 
+	 
 		 lastWeekMeanTicketPrice = (price/7d);
 	 }
 	 

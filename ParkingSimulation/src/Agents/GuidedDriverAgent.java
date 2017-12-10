@@ -46,6 +46,8 @@ public class GuidedDriverAgent extends DriverAgent {
 	@Override
 	public ParkingFacilityAgent getNextPark() {
 		ParkingFacilityAgent nextPark = parkList.poll();
+		if(nextPark == null)
+			return null;
 		GridPoint parkPoint = grid.getLocation(nextPark);
 		GridPoint destinationPoint = new GridPoint(getDestinationX(), getDestinationY());
 		double pricePerHour = nextPark.getCurrentPricePerHour(getDay());

@@ -50,7 +50,6 @@ public class ExplorerDriverAgent extends DriverAgent {
 		}
 
 		// Returns the closest park, and removes it from the list		
-		System.out.println("Index of park" + closestParkIndex);
 		return parkList.remove(closestParkIndex);
 	}
 

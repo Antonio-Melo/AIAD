@@ -149,6 +149,7 @@ public abstract class DriverAgent extends Agent {
 	protected ISchedule schedule;
 	protected ISchedulableAction action;
 	DriverUtilityCollector utilityCollector;
+	public static final int TICK_DURATION = 4;
 	
 	public DriverAgent(ContinuousSpace<Object> space, Grid<Object> grid, ParkingFacilityAgent[] parkingFacilities, ISchedule schedule, int weekDay, int weekCount, double initialTime, DriverUtilityCollector utilityCollector) throws SecurityException, IOException {
 
@@ -160,8 +161,9 @@ public abstract class DriverAgent extends Agent {
 		this.startY = RandomHelper.nextIntFromTo(0, 79);
 		this.destinationX = RandomHelper.createNormal(60, 14).nextInt();
 		this.destinationY = RandomHelper.createNormal(40, 9).nextInt();
-		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 3.0);
+		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(1.2, 3.8);
 		this.day = weekDay;
+		
 		/*
 		 * 0.0055m/ms -> 20km/h
 		 * 22meters em 3963ms
@@ -173,12 +175,12 @@ public abstract class DriverAgent extends Agent {
 		 * 
 		 * */
 		if(initialTime > 10)
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(0, 2) * 900;	
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(0, 2) * (60*60/TICK_DURATION);	
 		else
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * (60*60/TICK_DURATION);	
 			
 		this.initialTime = initialTime * 900  +  (21600 * weekDay * weekCount);
-		this.arrival = initialTime + 1350;
+		this.arrival = initialTime + (90*60/TICK_DURATION);
 		
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(35, 70);
 		this.grid = grid;
@@ -241,10 +243,6 @@ public abstract class DriverAgent extends Agent {
 		 * grid point of the target but to the point next to it.
 		 * 
 		 */
-		System.out.println(this.getClass());
-		System.out.println(ID);
-		System.out.println(target);
-		System.out.println(grid.getLocation(this));
 		if(target == null || grid.getLocation(this) == null)
 			return; 
 		
@@ -257,7 +255,6 @@ public abstract class DriverAgent extends Agent {
 
 			if (!park()) { // Could not park, or target wasn't park */
 				if (!setNextPark()) { // No suitable park found
-					System.out.println("NO PARK FOUND!!!! - ID = " + ID);
 					achievedUtility = DriverAgent.WORST_UTILITY;
 					utilityCollector.registerUtility(achievedUtility);
 					this.doDelete();
@@ -298,6 +295,8 @@ public abstract class DriverAgent extends Agent {
 		double distanceToDestination = space.getDistance(parkingFacilityPoint, destinationPoint);
 		double walkingDistUtility = BETA * distanceToDestination;
 
+		
+		
 		return maxUtility - priceCoefficient * Math.pow(priceUtility, POWER_U)
 				- walkingDistCoefficient * Math.pow(walkingDistUtility, POWER_V);
 	}
@@ -328,7 +327,7 @@ public abstract class DriverAgent extends Agent {
 		
 		GridPoint parkPoint = new GridPoint(targetPark.getX(), targetPark.getY());
 		GridPoint destinationPoint = new GridPoint(getDestinationX(), getDestinationY());
-		
+
 		if(targetPark.getCurrentPricePerHour(day) > maxPricePerHour || grid.getDistance(parkPoint, destinationPoint) > maxWalkingDistance || utilityValue(targetPark) < 0)
 			return false;
 

@@ -14,13 +14,13 @@
 						
 		/>
 				<parameter name="driver_count_weekdays" displayName="Driver Count (On Weekdays)" type="int" 
-						defaultValue="100" 
+						defaultValue="500" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
 				<parameter name="driver_count_weekends" displayName="Driver Count (Weekends)" type="int" 
-						defaultValue="80" 
+						defaultValue="400" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									

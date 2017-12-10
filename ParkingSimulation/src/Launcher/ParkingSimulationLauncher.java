@@ -207,7 +207,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
-		ScheduleParameters  params = ScheduleParameters.createRepeating(1, 21600);
+		ScheduleParameters  params = ScheduleParameters.createRepeating(1, (24*60*60/DriverAgent.TICK_DURATION));
 		schedule.schedule(params , this , "launchDrivers");
 	}
 		
@@ -225,7 +225,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		if(weekDay == 7) {
 			weekDay = 0;
 		}
-		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * 900 +  (21600 * weekDay) + (21600 * 7 * weekCount));
+		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * (60*60/DriverAgent.TICK_DURATION) +  ((24*60*60/DriverAgent.TICK_DURATION) * weekDay) + ((24*60*60/DriverAgent.TICK_DURATION) * 7 * weekCount));
 		schedule.schedule(params , this , "launchExplorerDriver", weekDay, weekCount, initialTime);	
 	}
 	
@@ -242,7 +242,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		if(weekDay == 7) {
 			weekDay = 0;
 		}
-		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * 900 +  (21600 * weekDay) + (21600 * 7 * weekCount));
+		ScheduleParameters  params = ScheduleParameters.createOneTime(initialTime * (60*60/DriverAgent.TICK_DURATION) +  ((24*60*60/DriverAgent.TICK_DURATION) * weekDay) + ((24*60*60/DriverAgent.TICK_DURATION) * 7 * weekCount));
 		schedule.schedule(params , this , "launchGuidedDriver", weekDay, weekCount, initialTime);	
 	}
 	

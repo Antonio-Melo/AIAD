@@ -1,12 +1,12 @@
 <repast.simphony.data2.engine.FileSinkDescriptor simphonyVersion="2.5.0">
-  <name>WeeklyRevenue</name>
-  <dataSet>Weekly Revenue</dataSet>
+  <name>Mean Ticket Price</name>
+  <dataSet>Mean Ticket Price</dataSet>
   <delimiter>,</delimiter>
   <format>TABULAR</format>
   <sourceIds class="linked-hash-set">
     <string>tick</string>
-    <string>Revenue</string>
+    <string>Ticket Price</string>
   </sourceIds>
-  <fileName>revenue.txt</fileName>
+  <fileName>C:\Users\Pedro\eclipse-workspace\AIAD\ParkingSimulation\output\meanticketprice.txt</fileName>
   <addTimeStamp>true</addTimeStamp>
 </repast.simphony.data2.engine.FileSinkDescriptor>
