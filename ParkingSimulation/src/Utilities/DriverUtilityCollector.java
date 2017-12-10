@@ -9,7 +9,7 @@ public class DriverUtilityCollector extends Agent{
 
 	private ArrayList<Double> weeklyUtilities;
 	private int currentWeek = 0;
-	private Double currentUtility;
+	private double currentUtility;
 	
 	public DriverUtilityCollector(){
 		weeklyUtilities = new ArrayList<Double>();
@@ -17,7 +17,7 @@ public class DriverUtilityCollector extends Agent{
 	}
 	
 	public void registerUtility(double utility){
-		currentUtility = currentUtility.doubleValue() + utility;
+		currentUtility = currentUtility + utility;
 	}
 	
 	public void registerWeek(){
@@ -26,8 +26,8 @@ public class DriverUtilityCollector extends Agent{
 		currentWeek++;
 	}
 	
-	public Double getCurrentUtility(){
-		return currentUtility.doubleValue();
+	public double getCurrentUtility(){
+		return currentUtility;
 	}
 	
 	public Double getUtilityForWeek(int week){
@@ -35,12 +35,6 @@ public class DriverUtilityCollector extends Agent{
 	}
 	
 	 public double lastWeekTotalUtility() { 
-		 System.out.println("Getting utility for week " + (currentWeek - 1));
-		 if(currentWeek == 0)
-			 return 0d;
-		 else {
-			 System.out.println(weeklyUtilities.get(currentWeek-1).doubleValue());
-			 return weeklyUtilities.get(currentWeek-1).doubleValue();
-		 } 
+		 return (currentWeek <= 0) ? 0d : weeklyUtilities.get(currentWeek-1).doubleValue();
 	 } 
 }
