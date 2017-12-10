@@ -160,29 +160,6 @@ public abstract class DriverAgent extends Agent {
 		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(0.8, 1.2);
 		this.day = weekDay;
 		/*
-<<<<<<< HEAD
-		 * 0.0055m/ms -> 20km/h 22meters em 3963ms In every tick the driver
-		 * moves one house, which is equivalent to 22m. There for every tick is
-		 * equivalent to 4000ms 1tick = 4000ms = 4s 1 dia = 86400s = 21600 ticks
-		 * 1h = 900 ticks 1min = 15 ticks
-		 */
-
-		if (day < 6) {
-			this.arrival = RandomHelper.createChiSquare(8).nextDouble();
-		} else {
-			arrival = 25;
-			while ((arrival > 24)) {
-				arrival = RandomHelper.createChiSquare(10).nextDouble();
-			}
-		}
-
-		if (this.arrival > 10)
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(0, 2) * 900;
-		else
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;
-
-		this.arrival = arrival * 900 * (day + 1) * (weekCount + 1);
-=======
 		 * 0.0055m/ms -> 20km/h
 		 * 22meters em 3963ms
 		 * In every tick the driver moves one house, which is equivalent to 22m. There for every tick is equivalent to 4000ms
@@ -200,7 +177,6 @@ public abstract class DriverAgent extends Agent {
 		this.initialTime = initialTime * 900  +  (21600 * weekDay * weekCount);
 		this.arrival = initialTime + 1350;
 		
->>>>>>> develop
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
 		this.grid = grid;
 		this.space = space;
@@ -210,13 +186,6 @@ public abstract class DriverAgent extends Agent {
 		
 		
 		Random random = new Random();
-<<<<<<< HEAD
-
-		ParkingSimulationLauncher.driverLogger
-				.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
-
-=======
->>>>>>> develop
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
 		 */
