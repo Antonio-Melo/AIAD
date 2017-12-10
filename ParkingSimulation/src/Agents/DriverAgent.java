@@ -163,25 +163,22 @@ public abstract class DriverAgent extends Agent {
 		 * equivalent to 4000ms 1tick = 4000ms = 4s 1 dia = 86400s = 21600 ticks
 		 * 1h = 900 ticks 1min = 15 ticks
 		 */
-		
-		  
-		if(day < 6) {
-			this.arrival = RandomHelper.createChiSquare(8).nextDouble();	
-		}else {
+
+		if (day < 6) {
+			this.arrival = RandomHelper.createChiSquare(8).nextDouble();
+		} else {
 			arrival = 25;
 			while ((arrival > 24)) {
 				arrival = RandomHelper.createChiSquare(10).nextDouble();
 			}
-		}	
+		}
 
-		if(this.arrival > 10)
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(0, 2) * 900;	
+		if (this.arrival > 10)
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(0, 2) * 900;
 		else
-			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;	
-			
-			
-		
-		this.arrival = arrival * 900 * (day+1) * (weekCount+1);
+			this.durationOfStay = RandomHelper.nextDoubleFromTo(7.5, 8.5) * 900;
+
+		this.arrival = arrival * 900 * (day + 1) * (weekCount + 1);
 		this.maxWalkingDistance = RandomHelper.nextIntFromTo(800, 1200);
 
 		if (this.arrival - 1350 < 0)
@@ -196,8 +193,8 @@ public abstract class DriverAgent extends Agent {
 		this.schedule = schedule;
 		Random random = new Random();
 
-
-		ParkingSimulationLauncher.driverLogger.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
+		ParkingSimulationLauncher.driverLogger
+				.info("Driver initialized with destination: " + destinationX + ", " + destinationY);
 
 		/*
 		 * Set the coefficients as a random double between COEF_MIN and COEF_MAX
@@ -249,18 +246,17 @@ public abstract class DriverAgent extends Agent {
 		 * grid point of the target but to the point next to it.
 		 * 
 		 */
-		if (grid.getDistance(grid.getLocation(this), target) > 1)
+		if (grid.getDistance(grid.getLocation(this), target) > 1){
 			moveTowards(target);
-
+		}
 		else { // reached target
-
 			/* Small frontend fix for the cases where the above happens */
 			grid.moveTo(this, target.getX(), target.getY());
-			if (!park()) {
-				/* Could not park, or target wasn't park */
-				if (!setNextPark()) {
-					/* No suitable park found */
+
+			if (!park()) { // Could not park, or target wasn't park */
+				if (!setNextPark()) { // No suitable park found
 					achievedUtility = DriverAgent.WORST_UTILITY;
+					ParkingSimulationLauncher.utilityCollector.registerUtility(achievedUtility);
 					this.doDelete();
 				}
 			}
@@ -322,6 +318,8 @@ public abstract class DriverAgent extends Agent {
 
 		ParkingSimulationLauncher.driverLogger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;
+		this.achievedUtility = utilityValue(targetPark);
+		ParkingSimulationLauncher.utilityCollector.registerUtility(achievedUtility);
 		targetPark.parkCar(this, durationOfStay, day);
 		return true;
 	}

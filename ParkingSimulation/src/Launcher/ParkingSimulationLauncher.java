@@ -10,6 +10,7 @@ import Agents.DriverAgent;
 import Agents.ExplorerDriverAgent;
 import Agents.GuidedDriverAgent;
 import Agents.ParkingFacilityAgent;
+import Utilities.DriverUtilityCollector;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
@@ -47,6 +48,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private int weekDay = 0;
 	private int weekCount = 0;
 	public static final Logger driverLogger = Logger.getLogger("DriverLogger");
+	public static final DriverUtilityCollector utilityCollector = new DriverUtilityCollector();
 	private String experiment;
 	
 	public static void main(String[] args) {
@@ -224,6 +226,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 				
 		/* Add the agents to the JADE container */
 		try {
+			driversCount = 0;
 			for (DriverAgent driver : drivers) {
 				driversCount++;
 				agentContainer.acceptNewAgent("driver-" + (driversCount++), driver).start();
@@ -240,6 +243,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			for(ParkingFacilityAgent park: parkingFacilities) {
 				park.updateParameter();
 			}
+			utilityCollector.registerWeek();
 		}
 			
 	}
@@ -248,6 +252,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	public Context build(Context<Object> context) {
 		context.setId("ParkingSimulation");
 		
+		// ======== Logger ==============
 		driverLogger.setUseParentHandlers(false);
 		FileHandler fh = null;
 		try {
@@ -259,20 +264,22 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		fh.setFormatter(new SimpleFormatter());
 		driverLogger.addHandler(fh);
 		
+		
+		// Get the parameters from the repast GUI
 		repast.simphony.parameter.Parameters parameters = RunEnvironment.getInstance().getParameters();
 		this.totalDriversPerWeekDay = parameters.getInteger("driver_count_weekdays");
 		this.totalDriversPerWeekendDay= parameters.getInteger("driver_count_weekends");
 		this.experiment = parameters.getString("experiment");
 
+		
+		// Build the repast Space and Grid
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
 		space = spaceFactory.createContinuousSpace("space", context, new RandomCartesianAdder<Object>(),
 				new repast.simphony.space.continuous.StrictBorders(), 120, 80);
 
 		GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
-
-		// Set the boolean to true if more than one car can occupy the same
-		// space
 		grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(new StrictBorders(), new SimpleGridAdder<Object>(), true, 120, 80));
+		
 		return super.build(context);
 	}
 }
