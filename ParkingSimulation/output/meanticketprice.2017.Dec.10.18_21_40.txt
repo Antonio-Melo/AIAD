@@ -1,2 +1,0 @@
-"tick","Ticket Price"
-75600.0,0.0

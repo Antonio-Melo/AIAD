@@ -55,7 +55,6 @@ public class GuidedDriverAgent extends DriverAgent {
 		while ((pricePerHour > getMaxPricePerHour() || grid.getDistance(destinationPoint, parkPoint) > getMaxWalkingDistance()) && nextPark != null)
 			nextPark = parkList.poll();
 		
-		ParkingSimulationLauncher.driverLogger.finer("Checking next park");
 		return nextPark;
 	}
 

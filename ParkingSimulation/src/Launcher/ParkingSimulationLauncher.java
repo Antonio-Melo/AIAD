@@ -48,7 +48,6 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	protected ISchedule schedule;
 	private int weekDay = 0;
 	private int weekCount = 0;
-	public static final Logger driverLogger = Logger.getLogger("DriverLogger");
 	public DriverUtilityCollector utilityCollector = new DriverUtilityCollector();
 	private String experiment;
 	
@@ -79,7 +78,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 			e1.printStackTrace();
 		}		
 		parkingFacilities = new ParkingFacilityAgent[] {
-					new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 2, 46, 698, new ArrayList<Double>() {{
+					new ParkingFacilityAgent(space, grid, "Cabergerweg", "Q-Park", 10, 46, 698, new ArrayList<Double>() {{
 						add(1.43d);
 					    add(1.43d);
 					    add(1.43d);
@@ -87,7 +86,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(1.43d);
 					    add(1.43d);
 					    add(1.43d);
-					}}, 9d, 1.43d, true, true, 0.3, 0.3),
+					}}, 9d, 1.43d, false, true, 0.3, 0.3),
 					
 					new ParkingFacilityAgent(space, grid, "Sphinx-terrein", "Q-Park", 35, 65, 500, new ArrayList<Double>() {{
 						add(2.22d);
@@ -97,7 +96,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(2.22d);
 					    add(2.22d);
 					    add(2.22d);
-					}}, 13d, 2.22d, true, true, 0.3, 0.3),
+					}}, 13d, 2.22d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "De griend", "Q-Park", 44, 71, 351, new ArrayList<Double>() {{
 						add(2.22d);
 					    add(2.22d);
@@ -106,7 +105,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(2.22d);
 					    add(2.22d);
 					    add(2.22d);
-					}}, 13d, 2.22d, true, true, 0.3, 0.3),
+					}}, 13d, 2.22d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Bassin", "Q-Park", 47, 49, 407, new ArrayList<Double>() {{
 						add(2.73d);
 					    add(2.73d);
@@ -115,7 +114,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(2.73d);
 					    add(2.73d);
 					    add(2.73d);
-					}}, 25d, 2.73d, true, true, 0.3, 0.3),
+					}}, 25d, 2.73d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "P + R station Maastricht", "Q-Park", 58, 63, 335,new ArrayList<Double>() {{
 						add(1.89d);
 					    add(1.89d);
@@ -124,7 +123,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(1.89d);
 					    add(1.89d);
 					    add(1.89d);
-					}}, 13d, 1.89d, true, true, 0.3, 0.3),
+					}}, 13d, 1.89d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Mosae forum", "Q-Park", 59, 55, 1082, new ArrayList<Double>() {{
 						add(2.73d);
 					    add(2.73d);
@@ -133,7 +132,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(2.73d);
 					    add(2.73d);
 					    add(2.73d);
-					}}, 25d, 2.73d, true, true, 0.3, 0.3),
+					}}, 25d, 2.73d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Vrijthof", "Q-Park", 61, 38, 545, new ArrayList<Double>() {{
 						add(3.53d);
 					    add(3.53d);
@@ -142,7 +141,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(3.53d);
 					    add(3.53d);
 					    add(3.53d);
-					}}, 35d, 3.53d, true, true, 0.3, 0.3),
+					}}, 35d, 3.53d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "P + R meerssenerweg", "Q-Park", 73, 69, 65, new ArrayList<Double>() {{
 						add(1.89d);
 					    add(1.89d);
@@ -151,7 +150,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(1.89d);
 					    add(1.89d);
 					    add(1.89d);
-					}}, 13d, 1.89d, true, true, 0.3, 0.3),
+					}}, 13d, 1.89d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "O.L. vrouweparking", "Q-Park", 79, 62, 350, new ArrayList<Double>() {{
 						add(2.73d);
 					    add(2.73d);
@@ -160,7 +159,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(2.73d);
 					    add(2.73d);
 					    add(2.73d);
-					}}, 25d, 2.73d, true, true, 0.3, 0.3),
+					}}, 25d, 2.73d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Plein 1992", "Q-Park", 72, 34, 449, new ArrayList<Double>() {{
 						add(2.22d);
 					    add(2.22d);
@@ -169,7 +168,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(2.22d);
 					    add(2.22d);
 					    add(2.22d);
-					}}, 13d, 2.22d, true, true, 0.3, 0.3),
+					}}, 13d, 2.22d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "De colonel", "Q-Park", 79, 17, 297, new ArrayList<Double>() {{
 						add(2.22d);
 					    add(2.22d);
@@ -178,7 +177,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(2.22d);
 					    add(2.22d);
 					    add(2.22d);
-					}}, 13d, 2.22d, true, true, 0.3, 0.3),
+					}}, 13d, 2.22d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Bonnefantenmuseum", "Q-Park", 90, 51, 303, new ArrayList<Double>() {{
 						add(1.43d);
 					    add(1.43d);
@@ -187,7 +186,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(1.43d);
 					    add(1.43d);
 					    add(1.43d);
-					}}, 25d, 1.43d, true, true, 0.3, 0.3),
+					}}, 25d, 1.43d, false, true, 0.3, 0.3),
 					new ParkingFacilityAgent(space, grid, "Brusselse poort", "Q-Park", 88, 40, 610, new ArrayList<Double>() {{
 						add(1.43d);
 					    add(1.43d);
@@ -196,7 +195,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 					    add(1.43d);
 					    add(1.43d);
 					    add(1.43d);
-					}}, 25d, 1.43d, true, true, 0.3, 0.3) };
+					}}, 25d, 1.43d, false, true, 0.3, 0.3) };
 
 		/* Add the agents to the JADE container */
 		try {
@@ -289,19 +288,7 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	@Override
 	public Context build(Context<Object> context) {
 		context.setId("ParkingSimulation");
-		
-		// ======== Logger ==============
-		driverLogger.setUseParentHandlers(false);
-		FileHandler fh = null;
-		try {
-			fh = new FileHandler("logs/drivers/drivers.txt");
-		} catch (SecurityException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fh.setFormatter(new SimpleFormatter());
-		driverLogger.addHandler(fh);
-		
+
 		
 		// Get the parameters from the repast GUI
 		repast.simphony.parameter.Parameters parameters = RunEnvironment.getInstance().getParameters();

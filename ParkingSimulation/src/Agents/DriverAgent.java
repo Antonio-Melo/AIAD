@@ -164,6 +164,16 @@ public abstract class DriverAgent extends Agent {
 		this.maxPricePerHour = RandomHelper.nextDoubleFromTo(1.2, 3.8);
 		this.day = weekDay;
 		
+		if(this.destinationX > 118)
+			this.destinationX = 118;
+		else if(this.destinationX < 0)
+			this.destinationX = 0;
+		
+		if(this.destinationY > 78)
+			this.destinationY = 78;
+		else if(this.destinationY < 0)
+			this.destinationY = 0;
+		
 		/*
 		 * 0.0055m/ms -> 20km/h
 		 * 22meters em 3963ms
@@ -313,10 +323,8 @@ public abstract class DriverAgent extends Agent {
 		targetPark = getNextPark();
 		if (targetPark != null) {
 			target = new GridPoint(targetPark.getX(), targetPark.getY());
-			ParkingSimulationLauncher.driverLogger.fine("Set target to park " + targetPark.getParkName());
 			return true;
 		}
-		ParkingSimulationLauncher.driverLogger.fine("No suitable park found");
 		return false;
 	}
 
@@ -331,7 +339,6 @@ public abstract class DriverAgent extends Agent {
 		if(targetPark.getCurrentPricePerHour(day) > maxPricePerHour || grid.getDistance(parkPoint, destinationPoint) > maxWalkingDistance || utilityValue(targetPark) < 0)
 			return false;
 
-		ParkingSimulationLauncher.driverLogger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;
 		this.achievedUtility = utilityValue(targetPark);
 		utilityCollector.registerUtility(achievedUtility);

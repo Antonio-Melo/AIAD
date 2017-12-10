@@ -361,8 +361,9 @@ public class ParkingFacilityAgent extends Agent {
 			else if(weeklyRevenue.get(currentWeek) == 0)
 				return 0;
 			else
-				return ((weeklyRevenue.get(currentWeek)-weeklyRevenue.get(currentWeek-1))/weeklyRevenue.get(currentWeek-1));
+				return ((weeklyRevenue.get(currentWeek))/weeklyRevenue.get(currentWeek-1));
 		} 
+		
 	}
 	
 	 public double currentRevenue() { 
