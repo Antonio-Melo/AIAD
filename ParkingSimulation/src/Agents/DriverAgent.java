@@ -238,18 +238,17 @@ public abstract class DriverAgent extends Agent {
 		 * grid point of the target but to the point next to it.
 		 * 
 		 */
-		if (grid.getDistance(grid.getLocation(this), target) > 1)
+		if (grid.getDistance(grid.getLocation(this), target) > 1){
 			moveTowards(target);
-
+		}
 		else { // reached target
-
 			/* Small frontend fix for the cases where the above happens */
 			grid.moveTo(this, target.getX(), target.getY());
-			if (!park()) {
-				/* Could not park, or target wasn't park */
-				if (!setNextPark()) {
-					/* No suitable park found */
+
+			if (!park()) { // Could not park, or target wasn't park */
+				if (!setNextPark()) { // No suitable park found
 					achievedUtility = DriverAgent.WORST_UTILITY;
+					ParkingSimulationLauncher.utilityCollector.registerUtility(achievedUtility);
 					this.doDelete();
 					schedule.removeAction(action);
 					try {
@@ -318,6 +317,8 @@ public abstract class DriverAgent extends Agent {
 
 		ParkingSimulationLauncher.driverLogger.finer("Parked in park " + targetPark.getName());
 		this.state = DriverState.PARKED;
+		this.achievedUtility = utilityValue(targetPark);
+		ParkingSimulationLauncher.utilityCollector.registerUtility(achievedUtility);
 		targetPark.parkCar(this, durationOfStay, day);
 		return true;
 	}

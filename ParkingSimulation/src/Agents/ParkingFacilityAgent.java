@@ -219,7 +219,7 @@ public class ParkingFacilityAgent extends Agent {
 	
 	public double getFinalPriceForNumberOfHours(double hours, int dayOfTheWeek) {
 		double finalPrice = calculateFinalPrice(hours,dayOfTheWeek);
-		finalPrice = calculateOcupacionDiscount(finalPrice);
+		finalPrice = calculateOccupationDiscount(finalPrice);
 		
 		if(finalPrice > maxPrice) {
 			return maxPrice;
@@ -249,7 +249,7 @@ public class ParkingFacilityAgent extends Agent {
 		return finalPrice;
 	}
 	
-	public double calculateOcupacionDiscount(double price){
+	public double calculateOccupationDiscount(double price){
 		double perOcupation = numCars/capacity;
 		
 		if(perOcupation < 0.3){
