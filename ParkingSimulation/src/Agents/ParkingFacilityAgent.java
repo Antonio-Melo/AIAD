@@ -356,5 +356,13 @@ public class ParkingFacilityAgent extends Agent {
 	 public double currentRevenue() { 
 	    return weeklyRevenue.get(currentWeek); 
 	 } 
+	 
+	 public double getTicketPrice() {
+		 double price = 0;
+		 for(int i = 0; i < 7; i++) {
+			 price += priceSchema.get(i);
+		 }
+		 return (price/7);
+	 }
 	
 }
