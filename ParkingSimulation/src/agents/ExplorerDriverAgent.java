@@ -1,10 +1,9 @@
-package Agents;
+package agents;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import Utilities.DriverUtilityCollector;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;

@@ -1,9 +1,9 @@
-package Utilities;
+package utilities;
 
 import java.util.Comparator;
 
-import Agents.DriverAgent;
-import Agents.ParkingFacilityAgent;
+import agents.DriverAgent;
+import agents.ParkingFacilityAgent;
 
 public class ParkingFacilityComparator implements Comparator<ParkingFacilityAgent> {
 

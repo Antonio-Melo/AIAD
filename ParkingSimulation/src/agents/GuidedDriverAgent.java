@@ -1,17 +1,16 @@
-package Agents;
+package agents;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.PriorityQueue;
 
-import Launcher.ParkingSimulationLauncher;
-import Utilities.DriverUtilityCollector;
-import Utilities.ParkingFacilityComparator;
+import launcher.ParkingSimulationLauncher;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.Schedule;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
+import utilities.ParkingFacilityComparator;
 
 public class GuidedDriverAgent extends DriverAgent {
 

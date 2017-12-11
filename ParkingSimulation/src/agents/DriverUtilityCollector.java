@@ -1,8 +1,7 @@
-package Utilities;
+package agents;
 
 import java.util.ArrayList;
 
-import Agents.DriverAgent;
 import sajas.core.Agent;
 
 public class DriverUtilityCollector extends Agent{
