@@ -266,28 +266,33 @@ public class ParkingFacilityAgent extends Agent {
 	public void updateParameter() {
 		checkParameterUpdates();
 		
-		switch(parameter) {
-		case PRICE_PER_HOUR:
-			updatePricePerHour();
-			break;
-		case MIN_PRICE:
-			updateMinPrice();
-			break;
-		case MAX_PRICE:
-			updateMaxPrice();
-			break;
-		case DEFLATION:
-			updateDeflation();
-			break;
-		case CAPACITY_DISCOUNT:
-			updateCapacityDiscount();
-			break;
-		default:
-			updatePricePerHour();
-			break;
-		}
-		
-		incUpdate();
+		 if(dynamic) { 
+		      checkParameterUpdates(); 
+		       
+		      switch(parameter) { 
+		      case PRICE_PER_HOUR: 
+		        updatePricePerHour(); 
+		        break; 
+		      case MIN_PRICE: 
+		        updateMinPrice(); 
+		        break; 
+		      case MAX_PRICE: 
+		        updateMaxPrice(); 
+		        break; 
+		      case DEFLATION: 
+		        updateDeflation(); 
+		        break; 
+		      case CAPACITY_DISCOUNT: 
+		        updateCapacityDiscount(); 
+		        break; 
+		      default: 
+		        updatePricePerHour(); 
+		        break; 
+		      } 
+		       
+		      incUpdate(); 
+		 }
+		 
 		nextWeek();
 	}
 	
@@ -385,7 +390,11 @@ public class ParkingFacilityAgent extends Agent {
 	 }
 	 
 	 public double getCurrentPricePerHour(int currentDay) {
-		 return priceSchema.get(currentDay);
+		 if(dynamic)
+			 return (calculateOccupationDiscount(priceSchema.get(currentDay)));
+		 else
+			 return priceSchema.get(currentDay);
 	 }
+	
 	
 }
