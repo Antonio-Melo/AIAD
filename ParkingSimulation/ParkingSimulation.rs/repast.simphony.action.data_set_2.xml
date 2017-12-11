@@ -19,7 +19,7 @@
       <string>Utility</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
         <id>Utility</id>
-        <className>utilities.DriverUtilityCollector</className>
+        <className>agents.DriverUtilityCollector</className>
         <methodName>lastWeekTotalUtility</methodName>
         <aggType>SUM</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>

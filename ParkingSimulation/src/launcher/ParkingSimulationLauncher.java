@@ -44,7 +44,6 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 	private int weekDay = 0;
 	private int weekCount = 0;
 	public DriverUtilityCollector utilityCollector = new DriverUtilityCollector();
-	private String experiment;
 	
 	public static void main(String[] args) {
 		ParkingSimulationLauncher model = new ParkingSimulationLauncher();
@@ -289,7 +288,6 @@ public class ParkingSimulationLauncher extends RepastSLauncher {
 		repast.simphony.parameter.Parameters parameters = RunEnvironment.getInstance().getParameters();
 		this.totalDriversPerWeekDay = parameters.getInteger("driver_count_weekdays");
 		this.totalDriversPerWeekendDay= parameters.getInteger("driver_count_weekends");
-		this.experiment = parameters.getString("experiment");
 
 		
 		// Build the repast Space and Grid
