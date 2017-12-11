@@ -19,7 +19,7 @@
       <string>Ticket Price</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
         <id>Ticket Price</id>
-        <className>Agents.ParkingFacilityAgent</className>
+        <className>agents.ParkingFacilityAgent</className>
         <methodName>getTicketPrice</methodName>
         <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>

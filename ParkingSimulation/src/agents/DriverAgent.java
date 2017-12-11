@@ -1,6 +1,5 @@
 package agents;
 
-import repast.simphony.engine.schedule.IAction;
 import repast.simphony.engine.schedule.ISchedulableAction;
 import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.schedule.ScheduleParameters;
@@ -12,14 +11,6 @@ import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import java.io.IOException;
 import java.util.Random;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
-import agents.DriverAgent.DriverState;
-import behaviors.DriverBehavior;
-import javassist.bytecode.stackmap.TypeData.ClassName;
-import launcher.ParkingSimulationLauncher;
 import sajas.core.Agent;
 
 public abstract class DriverAgent extends Agent {

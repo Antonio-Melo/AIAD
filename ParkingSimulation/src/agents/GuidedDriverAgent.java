@@ -1,12 +1,9 @@
 package agents;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.PriorityQueue;
 
-import launcher.ParkingSimulationLauncher;
 import repast.simphony.engine.schedule.ISchedule;
-import repast.simphony.engine.schedule.Schedule;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;

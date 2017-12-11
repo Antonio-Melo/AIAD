@@ -2,10 +2,6 @@ package launcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
 import agents.DriverAgent;
 import agents.DriverUtilityCollector;
 import agents.ExplorerDriverAgent;
@@ -14,7 +10,6 @@ import agents.ParkingFacilityAgent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
-import javassist.bytecode.stackmap.TypeData.ClassName;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;

@@ -19,7 +19,7 @@
       <string>Revenue</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
         <id>Revenue</id>
-        <className>Agents.ParkingFacilityAgent</className>
+        <className>agents.ParkingFacilityAgent</className>
         <methodName>currentRevenue</methodName>
         <aggType>SUM</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
